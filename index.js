@@ -37,6 +37,7 @@ async function run() {
         const database = client.db("jobCollections");
         const jobs = database.collection("jobs");
         const applyList = database.collection("applyList");
+        const userCollection = database.collection("users");
 
 
         //GET API  JOBS
@@ -110,7 +111,15 @@ async function run() {
             res.send(result);
             console.log(apply)
         })
+        //user registration post api
 
+        app.post('/users', async (req, res) => {
+            const user = req.body;
+
+            const result = await userCollection.insertOne(user);
+            console.log(result);
+            res.json(result);
+        });
     } finally {
         //await client.close();
     }
