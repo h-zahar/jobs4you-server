@@ -115,7 +115,7 @@ async function run() {
 
         app.post('/users', async (req, res) => {
             const user = req.body;
-
+            console.log(user);
             const result = await userCollection.insertOne(user);
             console.log(result);
             res.json(result);
