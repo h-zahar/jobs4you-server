@@ -109,13 +109,36 @@ async function run() {
       res.send(result);
       console.log(apply);
     });
-    //user registration post api
+
+    //User Registration Post Api
 
     app.post("/users", async (req, res) => {
       const user = req.body;
       console.log(user);
       const result = await userCollection.insertOne(user);
       console.log(result);
+      res.json(result);
+    });
+
+    // Nuzhat's Server
+
+    // Post a Job
+    app.post("/jobs", async (req, res) => {
+      const job = req.body;
+      job.status = "Pending";
+      const result = await jobs.insertOne(job);
+      console.log(result);
+      res.json(result);
+    });
+
+    // Update a Job Status
+    app.put("/updateJob/:id", async (req, res) => {
+      const id = req.params.id;
+      const filter = { _id: objectId(id) };
+      const updatedJob = req.body;
+      const options = { upsert: true };
+      const updatedDoc = { $set: { status: updatedJob.status } };
+      const result = await jobs.updateOne(filter, updatedDoc, options);
       res.json(result);
     });
   } finally {
