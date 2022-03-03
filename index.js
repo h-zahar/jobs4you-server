@@ -100,6 +100,15 @@ async function run() {
     const applyList = database.collection("applyList");
     const userCollection = database.collection("users");
     const resumeCollection = database.collection("resumes");
+
+    const skills = database.collection("skills");
+
+    const companies = client.db("companyCollection");
+    const topCompanies = companies.collection("topCompanies");
+
+    const faqbase = client.db("faqbase");
+    const faq = faqbase.collection("customFaq");
+
     //GET API  JOBS
 
     app.get("/jobs", async (req, res) => {
@@ -218,6 +227,27 @@ async function run() {
       res.json(result);
     });
 
+    //get all review
+    app.get('/reviews', async (req, res) => {
+      const cursor = reviewCollection.find({});
+
+      const reviews = await cursor.toArray();
+
+      res.send(reviews);
+    })
+
+    //Review POST API
+    app.post('/reviews', async (req, res) => {
+      const review = req.body;
+      // console.log('post hitted', service);
+      // order.status = 'pending';
+      // console.log(order);
+      const result = await reviewCollection.insertOne(review);
+
+      console.log(result);
+      res.json(result);
+    })
+
     // Nuzhat's Server
 
     // Post a Job
@@ -265,6 +295,8 @@ async function run() {
       }
 
     });
+
+
 
     // Faq Post
     app.get('/customfaq', async (req, res) => {
