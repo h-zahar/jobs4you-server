@@ -100,6 +100,7 @@ async function run() {
     const applyList = database.collection("applyList");
     const userCollection = database.collection("users");
     const resumeCollection = database.collection("resumes");
+    // Start Sadia Code //
     //GET API  JOBS
 
     app.get("/jobs", async (req, res) => {
@@ -195,18 +196,34 @@ async function run() {
       const encodedresumePdf = resumePdf.toString('base64');
       const resumePdfBuffer = Buffer.from(encodedresumePdf, 'base64');
 
-
-
       const resumeUpload = {
-
         email,
-
         resume: resumePdfBuffer,
       }
       const result = await resumeCollection.insertOne(resumeUpload);
       res.send(result);
       console.log(resumeUpload)
+
+      // Update Resume API
+
+      app.put("/updateInfo/:id", async (req, res) => {
+        const id = req.params.id;
+        const updatedInfo = req.body;
+        const filter = { _id: objectId(id) };
+        const options = { upsert: true };
+        const updateDoc = {
+          $set: {
+            resume: updatedInfo.resume,
+
+          },
+        };
+        const result = await resumeCollection.updateOne(filter, updateDoc, options)
+        console.log('updating', updatedInfo)
+        res.json(result)
+      });
     })
+
+    // End Sadia Code //
 
     //User Registration Post Api
 
