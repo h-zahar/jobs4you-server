@@ -38,59 +38,59 @@ const client = new MongoClient(uri, {
 // Creating Socket Server - Rifat
 const server = http.createServer(app);
 const io = socketio(server, {
-    cors: {
-      origin: "*",
-      // allowedHeaders: ["accept-header"],
-      methods: ["GET", "POST"]
-      // credentials: true
+  cors: {
+    origin: "*",
+    // allowedHeaders: ["accept-header"],
+    methods: ["GET", "POST"]
+    // credentials: true
+  }
+});
+
+// Establishing Connection - Rifat
+io.on('connection', (socket) => {
+  // console.log('New connection!');
+
+  socket.on('join', ({ name, room }, callback) => {
+    const { user, error } = addUser({ id: socket.id, name, room });
+    // console.log(user);
+
+    if (error) {
+      return callback(error);
     }
+
+    socket.emit('message', { user: 'admin', text: `hey, welcome to Jobs4You!` });
+    socket.broadcast.to(user.room).emit('message', { user: 'admin', text: `${user.name} has joined!` });
+
+    socket.emit('getUsers', { allUsers: getUsers() });
+
+    socket.join(user.room);
+
+    io.to(user.room).emit('roomData', { room: user.room, users: getUsersInRoom(user.id, user.room) });
+
+    callback();
   });
 
-  // Establishing Connection - Rifat
-  io.on('connection', (socket) => {
-    // console.log('New connection!');
-  
-    socket.on('join', ({ name, room }, callback) => {
-        const { user, error } = addUser({ id: socket.id, name, room });
-        // console.log(user);
-  
-        if(error) {
-            return callback(error);
-        }
-  
-        socket.emit('message', { user: 'admin', text: `hey, welcome to Jobs4You!` });
-        socket.broadcast.to(user.room).emit('message', { user: 'admin', text: `${user.name} has joined!` });
-  
-        socket.emit('getUsers', { allUsers: getUsers() });
-  
-        socket.join(user.room);
-  
-        io.to(user.room).emit('roomData', { room: user.room, users: getUsersInRoom(user.id, user.room) });
-  
-        callback();
-    });
-  
-    socket.on('sendMessage', (message, callback) => {
-        const user = getUser(socket.id);
-        io.to(user.room).emit('message', { user: user.name, text: message });
-        socket.emit('getUsers', { users: getUsers() });
-        io.to(user.room).emit('roomData', { room: user.room, users: getUsersInRoom(user.id, user.room) });
-  
-        callback();
-    });
-  
-    socket.on('disconnect', () => {
-        // console.log('User has disconnected');
-        const user = getUser(socket.id);
-  
-        if (user) {
-            io.to(user.room).emit('message', { user: 'admin', text: `${user.name} has left.` });
-            socket.emit('getUsers', { users: getRemainedUsers(user.id) });
-            io.to(user.room).emit('roomData', { room: user.room, users: getRemainedUsersInRoom(user.id, user.room) });
-            removeUser();
-        }
-    });
+  socket.on('sendMessage', (message, callback) => {
+    const user = getUser(socket.id);
+    io.to(user.room).emit('message', { user: user.name, text: message });
+    socket.emit('getUsers', { users: getUsers() });
+    io.to(user.room).emit('roomData', { room: user.room, users: getUsersInRoom(user.id, user.room) });
+
+    callback();
   });
+
+  socket.on('disconnect', () => {
+    // console.log('User has disconnected');
+    const user = getUser(socket.id);
+
+    if (user) {
+      io.to(user.room).emit('message', { user: 'admin', text: `${user.name} has left.` });
+      socket.emit('getUsers', { users: getRemainedUsers(user.id) });
+      io.to(user.room).emit('roomData', { room: user.room, users: getRemainedUsersInRoom(user.id, user.room) });
+      removeUser();
+    }
+  });
+});
 
 async function run() {
   try {
@@ -99,7 +99,7 @@ async function run() {
     const jobs = database.collection("jobs");
     const applyList = database.collection("applyList");
     const userCollection = database.collection("users");
-
+    const resumeCollection = database.collection("resumes");
     //GET API  JOBS
 
     app.get("/jobs", async (req, res) => {
@@ -170,6 +170,44 @@ async function run() {
       console.log(apply);
     });
 
+    // Get RESUME
+    app.get('/resume', async (req, res) => {
+      const cursor = resumeCollection.find({});
+      const resume = await cursor.toArray();
+      res.send(resume)
+    })
+
+    // GET SINGLE RESUME
+
+    app.get('/resume/:id', async (req, res) => {
+      const id = req.params.id;
+
+      const query = { _id: objectId(id) };
+      console.log(query)
+      const resume = await resumeCollections.findOne(query);
+      res.json(resume);
+    })
+    app.post('/resume', async (req, res) => {
+      const email = req.body.email;
+
+      const resume = req.files.resumepdfFile;
+      const resumePdf = resume.data;
+      const encodedresumePdf = resumePdf.toString('base64');
+      const resumePdfBuffer = Buffer.from(encodedresumePdf, 'base64');
+
+
+
+      const resumeUpload = {
+
+        email,
+
+        resume: resumePdfBuffer,
+      }
+      const result = await resumeCollection.insertOne(resumeUpload);
+      res.send(result);
+      console.log(resumeUpload)
+    })
+
     //User Registration Post Api
 
     app.post("/users", async (req, res) => {
@@ -204,7 +242,7 @@ async function run() {
 
 
     // Skill Add
-    app.post('/skills', async(req, res) => {
+    app.post('/skills', async (req, res) => {
       const insertDoc = req.body;
 
       const result = await skills.insertOne(insertDoc);
@@ -217,7 +255,7 @@ async function run() {
       const cursor = topCompanies.find(query);
 
       const result = await cursor.toArray();
-      
+
       if (result) {
         res.json(result);
       }
@@ -230,73 +268,73 @@ async function run() {
 
     // Faq Post
     app.get('/customfaq', async (req, res) => {
-        const query = {};
-        const cursor = faq.find(query);
+      const query = {};
+      const cursor = faq.find(query);
 
-        const result = await cursor.toArray();
+      const result = await cursor.toArray();
 
-        if(result) {
-          res.json(result);
-        }
+      if (result) {
+        res.json(result);
+      }
 
-        else {
-          res.send([]);
-        }
-        
-      });
+      else {
+        res.send([]);
+      }
+
+    });
 
     app.post('/customfaq', async (req, res) => {
-        const insertDoc = req.body;
+      const insertDoc = req.body;
 
-        const result = await faq.insertOne(insertDoc);
+      const result = await faq.insertOne(insertDoc);
+      res.json(result);
+    });
+
+    app.put('/customfaq', async (req, res) => {
+      const updated = req.body;
+
+      const filter = { _id: objectId(updated._id) };
+
+      const finalizeDoc = { comment: updated.comment, reply: updated.reply };
+
+      const updateDoc = {
+        $set: finalizeDoc
+      };
+
+      const result = await faq.updateOne(filter, updateDoc);
+
+      if (result) {
+        res.json(updated);
+      }
+    });
+
+    app.put('/faqLike/:email', async (req, res) => {
+      const email = req.params.email;
+      const updated = req.body;
+
+      const filter = { _id: objectId(updated._id) };
+
+      if (!updated?.liked) {
+        updated.liked = [];
+      }
+
+      const isFound = await updated?.liked.findIndex(single => single === email);
+
+      if (email && isFound === -1) {
+        await updated?.liked.push(email);
+        const result = await faq.updateOne(filter, updated);
+
         res.json(result);
-      });
+      }
 
-      app.put('/customfaq', async (req, res) => {
-        const updated = req.body;
+      else if (email && isFound !== -1 && updated?.liked.length) {
+        await updated?.liked.slice(isFound, isFound + 1)[0];
+        const result = await faq.insertOne(filter, updated);
 
-        const filter = { _id: objectId(updated._id) };
+        res.json(result);
+      }
 
-        const finalizeDoc = { comment: updated.comment, reply: updated.reply };
-
-        const updateDoc = {
-              $set: finalizeDoc
-          };
-
-            const result = await faq.updateOne(filter, updateDoc);
-
-            if (result) {
-            res.json(updated);
-            }
-      });
-
-      app.put('/faqLike/:email', async (req, res) => {
-        const email = req.params.email;
-        const updated = req.body;
-
-        const filter = { _id: objectId(updated._id) };
-
-        if (!updated?.liked) {
-          updated.liked = [];
-        }
-
-        const isFound = await updated?.liked.findIndex(single => single === email);
-        
-        if (email && isFound === -1) {
-          await updated?.liked.push(email);
-          const result = await faq.updateOne(filter, updated);
-
-          res.json(result);
-        }
-
-        else if (email && isFound !== -1 && updated?.liked.length) {
-          await updated?.liked.slice(isFound, isFound + 1)[0];
-          const result = await faq.insertOne(filter, updated);
-
-          res.json(result);
-        }
-
-      });
+    });
 
   } finally {
     //await client.close();
