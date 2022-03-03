@@ -100,6 +100,15 @@ async function run() {
     const applyList = database.collection("applyList");
     const userCollection = database.collection("users");
     const resumeCollection = database.collection("resumes");
+
+    const skills = database.collection("skills");
+
+    const companies = client.db("companyCollection");
+    const topCompanies = companies.collection("topCompanies");
+
+    const faqbase = client.db("faqbase");
+    const faq = faqbase.collection("customFaq");
+
     //GET API  JOBS
 
     app.get("/jobs", async (req, res) => {
