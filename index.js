@@ -235,6 +235,27 @@ async function run() {
       res.json(result);
     });
 
+    //get all review
+    app.get('/reviews', async (req, res) => {
+      const cursor = reviewCollection.find({});
+
+      const reviews = await cursor.toArray();
+
+      res.send(reviews);
+    })
+
+    //Review POST API
+    app.post('/reviews', async (req, res) => {
+      const review = req.body;
+      // console.log('post hitted', service);
+      // order.status = 'pending';
+      // console.log(order);
+      const result = await reviewCollection.insertOne(review);
+
+      console.log(result);
+      res.json(result);
+    })
+
     // Nuzhat's Server
 
     // Post a Job
@@ -282,6 +303,8 @@ async function run() {
       }
 
     });
+
+
 
     // Faq Post
     app.get('/customfaq', async (req, res) => {
