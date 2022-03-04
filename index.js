@@ -39,10 +39,10 @@ const client = new MongoClient(uri, {
 const server = http.createServer(app);
 const io = socketio(server, {
   cors: {
-    origin: "*",
-    // allowedHeaders: ["accept-header"],
-    methods: ["GET", "POST"]
-    // credentials: true
+    origin: "https://jobs4you-a95fe.web.app",
+    allowedHeaders: ["accept-header"],
+    methods: ["GET", "POST"],
+    credentials: true
   }
 });
 
@@ -260,8 +260,8 @@ async function run() {
       if (user?.role === 'admin') {
         isAdmin = 'admin';
       }
-      else if (user?.role === 'user') {
-        isAdmin = 'user';
+      else if (user?.role === 'seeker') {
+        isAdmin = 'seeker';
       }
       else if (user?.role === 'company') {
         isAdmin = 'company';
