@@ -100,6 +100,12 @@ async function run() {
     const applyList = database.collection("applyList");
     const userCollection = database.collection("users");
     const resumeCollection = database.collection("resumes");
+    // ... Raju's DB && Collection
+    const profileDB = client.db("AllProfiles");
+        const govJobsCollection = database.collection("Gov-jobs");
+        const candidatesCollection = profileDB.collection("CandidatesProfile");
+        const employersCollection = profileDB.collection("EmployersProfile");
+//............
 
     const skills = database.collection("skills");
 
@@ -108,7 +114,6 @@ async function run() {
 
     const faqbase = client.db("faqbase");
     const faq = faqbase.collection("customFaq");
-
     //GET API  JOBS
 
     app.get("/jobs", async (req, res) => {
@@ -204,18 +209,34 @@ async function run() {
       const encodedresumePdf = resumePdf.toString('base64');
       const resumePdfBuffer = Buffer.from(encodedresumePdf, 'base64');
 
-
-
       const resumeUpload = {
-
         email,
-
         resume: resumePdfBuffer,
       }
       const result = await resumeCollection.insertOne(resumeUpload);
       res.send(result);
       console.log(resumeUpload)
+
+      // Update Resume API
+
+      app.put("/updateInfo/:id", async (req, res) => {
+        const id = req.params.id;
+        const updatedInfo = req.body;
+        const filter = { _id: objectId(id) };
+        const options = { upsert: true };
+        const updateDoc = {
+          $set: {
+            resume: updatedInfo.resume,
+
+          },
+        };
+        const result = await resumeCollection.updateOne(filter, updateDoc, options)
+        console.log('updating', updatedInfo)
+        res.json(result)
+      });
     })
+
+    // End Sadia Code //
 
     //User Registration Post Api
 
@@ -367,6 +388,113 @@ async function run() {
       }
 
     });
+    // ****** Raju **********//
+// Post gov jobs
+app.post('/addgovjob', async(req,res)=>{
+  const jobInfo=req.body
+  const insertedJob= await govJobsCollection.insertOne(jobInfo)
+  res.json(insertedJob)
+})
+// get gov jobs
+app.get('/allgovjobs', async(req,res)=>{
+  const getAllJobs=await govJobsCollection.find({}).toArray();
+  res.json(getAllJobs)
+})
+//   get single job
+app.get('/allgovjobs/:id', async (req, res) => {
+const id = req.params.id;
+const query = { _id: objectId(id) };
+console.log(query)
+const job = await govJobsCollection.findOne(query);
+res.json(job);
+})
+// Edit gov jobs
+app.put('/govjobs/:id',async(req,res)=>{
+const filter = { _id:objectId(req.params.id)};
+console.log(filter)
+const updateStatus = {
+
+$set: {
+organization:req.body.organization,
+position:req.body.position,
+deadline:req.body.deadline,
+vacancy:req.body.vacancy
+
+},
+
+};
+const updateResult=await govJobsCollection.updateOne(filter,updateStatus) 
+console.log(updateResult)
+res.json(updateResult)
+})
+// create pdf ( Raju )
+app.post('/createPdf', (req, res) => {
+console.log(req.body)
+pdf.create(pdfTemplate(req.body), {}).toFile('result.pdf', (err) => {
+    if(err) {
+        res.send(Promise.reject());
+    }
+
+    res.send(Promise.resolve());
+    console.log(Promise.resolve())
+});
+});
+
+// get pdf
+
+app.get('/fetch-pdf', (req, res) => {
+res.sendFile(`${__dirname}/result.pdf`)
+})
+
+// Job-seekers && recruiter's profile
+app.post('/addProfile', async(req,res)=>{
+const profileInfo=req.body
+console.log(profileInfo,'hit the api')
+let insertedProfile;
+if(profileInfo.role.toLowerCase()=='candidate'){
+insertedProfile= await candidatesCollection.insertOne(profileInfo)
+}else{
+insertedProfile= await employersCollection.insertOne(profileInfo)
+}
+res.json(insertedProfile)
+})
+// All profile
+app.get('/allprofiles', async(req,res)=>{
+const allCandidates= await candidatesCollection.find({}).toArray();
+res.json(allCandidates)
+})
+//   get single profile
+app.get('/profile/:id', async (req, res) => {
+const id = req.params.id;
+
+const query = { _id: objectId(id) };
+console.log(query)
+const candidate = await candidatesCollection.findOne(query);
+res.json(candidate);
+})
+
+// Edit profile
+app.put('/singleProfile/:id',async(req,res)=>{
+const filter = { _id:objectId(req.params.id)};
+console.log(filter)
+const updateStatus = {
+
+$set: {
+fname:req.body.fname,
+pEmail:req.body.pEmail,
+pContact:req.body.pContact,
+lname:req.body.lname
+
+},
+
+};
+const updateResult=await candidatesCollection.updateOne(filter,updateStatus) 
+console.log(updateResult)
+res.json(updateResult)
+})
+
+// ****** Raju **********//
+
 
   } finally {
     //await client.close();
