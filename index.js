@@ -433,15 +433,14 @@ res.sendFile(`${__dirname}/result.pdf`)
 
 // Job-seekers && recruiter's profile
 app.post('/addProfile', async(req,res)=>{
-const profileInfo=req.body
-console.log(profileInfo,'hit the api')
-let insertedProfile;
-if(profileInfo.role.toLowerCase()=='candidate'){
-insertedProfile= await candidatesCollection.insertOne(profileInfo)
-}else{
-insertedProfile= await employersCollection.insertOne(profileInfo)
-}
-res.json(insertedProfile)
+  const profileInfo=req.body
+  let insertedProfile;
+ if(profileInfo.industy===undefined){
+   insertedProfile= await candidatesCollection.insertOne(profileInfo)
+ }else{
+  insertedProfile= await employersCollection.insertOne(profileInfo)
+ }
+  res.json(insertedProfile)
 })
 // All profile
 app.get('/allprofiles', async(req,res)=>{
@@ -456,6 +455,12 @@ const query = { _id: objectId(id) };
 console.log(query)
 const candidate = await candidatesCollection.findOne(query);
 res.json(candidate);
+})
+
+// get companies profile
+app.get('/companyprofiles', async(req,res)=>{
+  const allCompanies= await employersCollection.find({}).toArray();
+  res.json(allCompanies)
 })
 
 // Edit profile
