@@ -5,6 +5,7 @@ const { json } = require("body-parser");
 const fileUpload = require("express-fileupload");
 const socketio = require('socket.io');
 const http = require('http');
+const { addUser, removeUser, getUsers, getUser, getRemainedUsers, getUsersInRoom, getRemainedUsersInRoom } = require('./users');
 // const multer = require("multer")
 
 const objectId = require("mongodb").ObjectId;
@@ -39,10 +40,10 @@ const client = new MongoClient(uri, {
 const server = http.createServer(app);
 const io = socketio(server, {
   cors: {
-    origin: "https://jobs4you-a95fe.web.app",
-    allowedHeaders: ["accept-header"],
+    origin: "*",
+    // allowedHeaders: ["accept-header"],
     methods: ["GET", "POST"],
-    credentials: true
+    // credentials: true
   }
 });
 
@@ -403,28 +404,142 @@ async function run() {
       }
     });
 
-    app.put('/faqLike/:email', async (req, res) => {
+    app.get('/faqGetDislikes', async (req, res) => {
+      const { id, email } = req.query;
+      const query = { _id: objectId(id) };
+
+      const result = await faq.findOne(query);
+
+      if (result) {
+        let isDisliked = false;
+        const isFound = await result?.disliked?.findIndex(single => single === email);
+
+        if (isFound === -1) {
+          isDisliked = false;
+        }
+        
+        else if (isFound !== -1) {
+          isDisliked = true;
+        }
+
+        res.json( { isDisliked, dislikes: result?.disliked?.length });
+      }
+    });
+
+    app.put('/faqDislike/:email', async (req, res) => {
       const email = req.params.email;
       const updated = req.body;
 
-      const filter = { _id: objectId(updated._id) };
+      const filter = { _id: objectId(updated?._id) };
 
       if (!updated?.liked) {
         updated.liked = [];
       }
 
-      const isFound = await updated?.liked.findIndex(single => single === email);
+      if (!updated?.disliked) {
+        updated.disliked = [];
+      }
 
-      if (email && isFound === -1) {
-        await updated?.liked.push(email);
-        const result = await faq.updateOne(filter, updated);
+      const isFound = await updated?.disliked.findIndex(single => single === email);
+
+      const isOppositeFound = await updated?.liked.findIndex(single => single === email);
+
+
+      if (email && (isFound === -1)) {
+        if (isOppositeFound !== -1) {
+          await updated?.liked.splice(isOppositeFound, isOppositeFound + 1)[0];
+        }
+
+        await updated?.disliked.push(email);
+        const finalizeDoc = { comment: updated.comment, reply: updated.reply, liked: updated.liked, disliked: updated.disliked };
+        const updateDoc = {
+          $set: finalizeDoc
+        };
+        const result = await faq.updateOne(filter, updateDoc);
 
         res.json(result);
       }
 
-      else if (email && isFound !== -1 && updated?.liked.length) {
-        await updated?.liked.slice(isFound, isFound + 1)[0];
-        const result = await faq.insertOne(filter, updated);
+      else if (email && (isFound !== -1) && updated?.disliked.length) {
+        await updated?.disliked.splice(isFound, isFound + 1)[0];
+
+        const finalizeDoc = { comment: updated.comment, reply: updated.reply, liked: updated.liked, disliked: updated.disliked };
+
+        const updateDoc = {
+          $set: finalizeDoc
+        };
+        const result = await faq.updateOne(filter, updateDoc);
+
+        res.json(result);
+      }
+
+    });
+
+    app.get('/faqGetLikes', async (req, res) => {
+      const { id, email } = req.query;
+      const query = { _id: objectId(id) };
+
+      const result = await faq.findOne(query);
+
+      if (result) {
+        let isLiked = false;
+        const isFound = await result?.liked?.findIndex(single => single === email);
+
+        if (isFound === -1) {
+          isLiked = false;
+        }
+        
+        else if (isFound !== -1) {
+          isLiked = true;
+        }
+
+        res.json( { isLiked, likes: result?.liked?.length });
+      }
+    });
+
+    app.put('/faqLike/:email', async (req, res) => {
+      const email = req.params.email;
+      const updated = req.body;
+      console.log(email, updated);
+
+      const filter = { _id: objectId(updated?._id) };
+
+      if (!updated?.liked) {
+        updated.liked = [];
+      }
+
+      if (!updated?.disliked) {
+        updated.disliked = [];
+      }
+
+      const isFound = await updated?.liked.findIndex(single => single === email);
+
+      const isOppositeFound = await updated?.disliked.findIndex(single => single === email);
+
+
+      if (email && (isFound === -1)) {
+        if (isOppositeFound !== -1) {
+          await updated?.disliked.splice(isOppositeFound, isOppositeFound + 1)[0];
+        }
+
+        await updated?.liked.push(email);
+        const finalizeDoc = { comment: updated.comment, reply: updated.reply, liked: updated.liked, disliked: updated.disliked };
+        const updateDoc = {
+          $set: finalizeDoc
+        };
+        const result = await faq.updateOne(filter, updateDoc);
+
+        res.json(result);
+      }
+
+      else if (email && (isFound !== -1) && updated?.liked.length) {
+        await updated?.liked.splice(isFound, isFound + 1)[0];
+
+        const finalizeDoc = { comment: updated.comment, reply: updated.reply, liked: updated.liked, disliked: updated.disliked };
+        const updateDoc = {
+          $set: finalizeDoc
+        };
+        const result = await faq.updateOne(filter, updateDoc);
 
         res.json(result);
       }
