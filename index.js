@@ -5,6 +5,7 @@ const { json } = require("body-parser");
 const fileUpload = require("express-fileupload");
 const socketio = require('socket.io');
 const http = require('http');
+const { addUser, removeUser, getUsers, getUser, getRemainedUsers, getUsersInRoom, getRemainedUsersInRoom } = require('./users');
 // const multer = require("multer")
 
 const objectId = require("mongodb").ObjectId;
@@ -41,7 +42,7 @@ const io = socketio(server, {
   cors: {
     origin: "*",
     // allowedHeaders: ["accept-header"],
-    methods: ["GET", "POST"]
+    methods: ["GET", "POST"],
     // credentials: true
   }
 });
@@ -100,6 +101,12 @@ async function run() {
     const applyList = database.collection("applyList");
     const userCollection = database.collection("users");
     const resumeCollection = database.collection("resumes");
+    // ... Raju's DB && Collection
+    const profileDB = client.db("AllProfiles");
+    const govJobsCollection = database.collection("Gov-jobs");
+    const candidatesCollection = profileDB.collection("CandidatesProfile");
+    const employersCollection = profileDB.collection("EmployersProfile");
+    //............
 
     const skills = database.collection("skills");
 
@@ -108,7 +115,7 @@ async function run() {
 
     const faqbase = client.db("faqbase");
     const faq = faqbase.collection("customFaq");
-
+    const reviewCollection = database.collection("reviews");
     //GET API  JOBS
 
     app.get("/jobs", async (req, res) => {
@@ -204,19 +211,37 @@ async function run() {
       const encodedresumePdf = resumePdf.toString('base64');
       const resumePdfBuffer = Buffer.from(encodedresumePdf, 'base64');
 
-
-
       const resumeUpload = {
-
         email,
-
         resume: resumePdfBuffer,
       }
       const result = await resumeCollection.insertOne(resumeUpload);
       res.send(result);
       console.log(resumeUpload)
+
+      // Update Resume API
+
+      app.put("/updateInfo/:id", async (req, res) => {
+        const id = req.params.id;
+        const updatedInfo = req.body;
+        const filter = { _id: objectId(id) };
+        const options = { upsert: true };
+        const updateDoc = {
+          $set: {
+            resume: updatedInfo.resume,
+
+          },
+        };
+        const result = await resumeCollection.updateOne(filter, updateDoc, options)
+        console.log('updating', updatedInfo)
+        res.json(result)
+      });
     })
 
+    // End Sadia Code //
+
+
+    //shaon code
     //User Registration Post Api
 
     app.post("/users", async (req, res) => {
@@ -226,6 +251,25 @@ async function run() {
       console.log(result);
       res.json(result);
     });
+
+    //admin role get api
+    app.get('/users/:email', async (req, res) => {
+      const email = req.params.email;
+      const query = { email: email };
+      const user = await userCollection.findOne(query);
+      let isAdmin = 'user';
+      if (user?.role === 'admin') {
+        isAdmin = 'admin';
+      }
+      else if (user?.role === 'seeker') {
+        isAdmin = 'seeker';
+      }
+      else if (user?.role === 'company') {
+        isAdmin = 'company';
+      }
+
+      res.json({ admin: isAdmin });
+    })
 
     //get all review
     app.get('/reviews', async (req, res) => {
@@ -247,7 +291,27 @@ async function run() {
       console.log(result);
       res.json(result);
     })
+    //google sign in user update/put function
+    app.put('/users', async (req, res) => {
+      const user = req.body;
+      // user.role = 'user';
+      console.log(user);
+      const filter = { email: user.email };
+      const options = { upsert: true };
+      const updateDoc = { $set: user };
+      const result = await userCollection.updateOne(filter, updateDoc, options);
+      res.json(result);
+    });
+    //make admin
+    app.put('/users/admin', async (req, res) => {
+      const user = req.body;
+      const filter = { email: user.email };
+      const updateDoc = { $set: { role: 'admin' } };
+      const result = await userCollection.updateOne(filter, updateDoc);
+      res.json(result);
 
+
+    })
     // Nuzhat's Server
 
     // Post a Job
@@ -340,33 +404,254 @@ async function run() {
       }
     });
 
-    app.put('/faqLike/:email', async (req, res) => {
+    app.get('/faqGetDislikes', async (req, res) => {
+      const { id, email } = req.query;
+      const query = { _id: objectId(id) };
+
+      const result = await faq.findOne(query);
+
+      if (result) {
+        let isDisliked = false;
+        const isFound = await result?.disliked?.findIndex(single => single === email);
+
+        if (isFound === -1) {
+          isDisliked = false;
+        }
+        
+        else if (isFound !== -1) {
+          isDisliked = true;
+        }
+
+        res.json( { isDisliked, dislikes: result?.disliked?.length });
+      }
+    });
+
+    app.put('/faqDislike/:email', async (req, res) => {
       const email = req.params.email;
       const updated = req.body;
 
-      const filter = { _id: objectId(updated._id) };
+      const filter = { _id: objectId(updated?._id) };
 
       if (!updated?.liked) {
         updated.liked = [];
       }
 
-      const isFound = await updated?.liked.findIndex(single => single === email);
+      if (!updated?.disliked) {
+        updated.disliked = [];
+      }
 
-      if (email && isFound === -1) {
-        await updated?.liked.push(email);
-        const result = await faq.updateOne(filter, updated);
+      const isFound = await updated?.disliked.findIndex(single => single === email);
+
+      const isOppositeFound = await updated?.liked.findIndex(single => single === email);
+
+
+      if (email && (isFound === -1)) {
+        if (isOppositeFound !== -1) {
+          await updated?.liked.splice(isOppositeFound, isOppositeFound + 1)[0];
+        }
+
+        await updated?.disliked.push(email);
+        const finalizeDoc = { comment: updated.comment, reply: updated.reply, liked: updated.liked, disliked: updated.disliked };
+        const updateDoc = {
+          $set: finalizeDoc
+        };
+        const result = await faq.updateOne(filter, updateDoc);
 
         res.json(result);
       }
 
-      else if (email && isFound !== -1 && updated?.liked.length) {
-        await updated?.liked.slice(isFound, isFound + 1)[0];
-        const result = await faq.insertOne(filter, updated);
+      else if (email && (isFound !== -1) && updated?.disliked.length) {
+        await updated?.disliked.splice(isFound, isFound + 1)[0];
+
+        const finalizeDoc = { comment: updated.comment, reply: updated.reply, liked: updated.liked, disliked: updated.disliked };
+
+        const updateDoc = {
+          $set: finalizeDoc
+        };
+        const result = await faq.updateOne(filter, updateDoc);
 
         res.json(result);
       }
 
     });
+
+    app.get('/faqGetLikes', async (req, res) => {
+      const { id, email } = req.query;
+      const query = { _id: objectId(id) };
+
+      const result = await faq.findOne(query);
+
+      if (result) {
+        let isLiked = false;
+        const isFound = await result?.liked?.findIndex(single => single === email);
+
+        if (isFound === -1) {
+          isLiked = false;
+        }
+        
+        else if (isFound !== -1) {
+          isLiked = true;
+        }
+
+        res.json( { isLiked, likes: result?.liked?.length });
+      }
+    });
+
+    app.put('/faqLike/:email', async (req, res) => {
+      const email = req.params.email;
+      const updated = req.body;
+      console.log(email, updated);
+
+      const filter = { _id: objectId(updated?._id) };
+
+      if (!updated?.liked) {
+        updated.liked = [];
+      }
+
+      if (!updated?.disliked) {
+        updated.disliked = [];
+      }
+
+      const isFound = await updated?.liked.findIndex(single => single === email);
+
+      const isOppositeFound = await updated?.disliked.findIndex(single => single === email);
+
+
+      if (email && (isFound === -1)) {
+        if (isOppositeFound !== -1) {
+          await updated?.disliked.splice(isOppositeFound, isOppositeFound + 1)[0];
+        }
+
+        await updated?.liked.push(email);
+        const finalizeDoc = { comment: updated.comment, reply: updated.reply, liked: updated.liked, disliked: updated.disliked };
+        const updateDoc = {
+          $set: finalizeDoc
+        };
+        const result = await faq.updateOne(filter, updateDoc);
+
+        res.json(result);
+      }
+
+      else if (email && (isFound !== -1) && updated?.liked.length) {
+        await updated?.liked.splice(isFound, isFound + 1)[0];
+
+        const finalizeDoc = { comment: updated.comment, reply: updated.reply, liked: updated.liked, disliked: updated.disliked };
+        const updateDoc = {
+          $set: finalizeDoc
+        };
+        const result = await faq.updateOne(filter, updateDoc);
+
+        res.json(result);
+      }
+
+    });
+    // ****** Raju **********//
+    // Post gov jobs
+    app.post('/addgovjob', async (req, res) => {
+      const jobInfo = req.body
+      const insertedJob = await govJobsCollection.insertOne(jobInfo)
+      res.json(insertedJob)
+    })
+    // get gov jobs
+    app.get('/allgovjobs', async (req, res) => {
+      const getAllJobs = await govJobsCollection.find({}).toArray();
+      res.json(getAllJobs)
+    })
+    //   get single job
+    app.get('/allgovjobs/:id', async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: objectId(id) };
+      console.log(query)
+      const job = await govJobsCollection.findOne(query);
+      res.json(job);
+    })
+    // Edit gov jobs
+    app.put('/govjobs/:id', async (req, res) => {
+      const filter = { _id: objectId(req.params.id) };
+      console.log(filter)
+      const updateStatus = {
+
+        $set: {
+          organization: req.body.organization,
+          position: req.body.position,
+          deadline: req.body.deadline,
+          vacancy: req.body.vacancy
+
+        },
+
+      };
+      const updateResult = await govJobsCollection.updateOne(filter, updateStatus)
+      console.log(updateResult)
+      res.json(updateResult)
+    })
+    // create pdf ( Raju )
+    app.post('/createPdf', (req, res) => {
+      console.log(req.body)
+      pdf.create(pdfTemplate(req.body), {}).toFile('result.pdf', (err) => {
+        if (err) {
+          res.send(Promise.reject());
+        }
+
+        res.send(Promise.resolve());
+        console.log(Promise.resolve())
+      });
+    });
+
+    // get pdf
+
+    app.get('/fetch-pdf', (req, res) => {
+      res.sendFile(`${__dirname}/result.pdf`)
+    })
+
+    // Job-seekers && recruiter's profile
+    app.post('/addProfile', async (req, res) => {
+      const profileInfo = req.body
+      console.log(profileInfo, 'hit the api')
+      let insertedProfile;
+      if (profileInfo.role.toLowerCase() == 'candidate') {
+        insertedProfile = await candidatesCollection.insertOne(profileInfo)
+      } else {
+        insertedProfile = await employersCollection.insertOne(profileInfo)
+      }
+      res.json(insertedProfile)
+    })
+    // All profile
+    app.get('/allprofiles', async (req, res) => {
+      const allCandidates = await candidatesCollection.find({}).toArray();
+      res.json(allCandidates)
+    })
+    //   get single profile
+    app.get('/profile/:id', async (req, res) => {
+      const id = req.params.id;
+
+      const query = { _id: objectId(id) };
+      console.log(query)
+      const candidate = await candidatesCollection.findOne(query);
+      res.json(candidate);
+    })
+
+    // Edit profile
+    app.put('/singleProfile/:id', async (req, res) => {
+      const filter = { _id: objectId(req.params.id) };
+      console.log(filter)
+      const updateStatus = {
+
+        $set: {
+          fname: req.body.fname,
+          pEmail: req.body.pEmail,
+          pContact: req.body.pContact,
+          lname: req.body.lname
+
+        },
+
+      };
+      const updateResult = await candidatesCollection.updateOne(filter, updateStatus)
+      console.log(updateResult)
+      res.json(updateResult)
+    })
+
+    // ****** Raju **********//
+
 
   } finally {
     //await client.close();
