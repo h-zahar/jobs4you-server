@@ -151,6 +151,11 @@ async function run() {
       res.json(apply);
     });
     app.post("/applyList", async (req, res) => {
+      const job = req.body.job;
+      const company = req.body.company;
+      const jobLocation = req.body.jobLocation;
+      const employmentStatus = req.body.employmentStatus;
+      const image = req.body.image;
       const firstName = req.body.firstName;
       const lastName = req.body.lastName;
       const dob = req.body.dob;
@@ -169,6 +174,11 @@ async function run() {
       const coverLetterPdfBuffer = Buffer.from(encodedcoverletterPdf, "base64");
 
       const apply = {
+        job,
+        company,
+        jobLocation,
+        employmentStatus,
+        image,
         firstName,
         lastName,
         dob,
