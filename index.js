@@ -141,6 +141,19 @@ async function run() {
       const result = await jobs.updateOne(filter, updatedDoc, options);
       res.json(result);
     });
+
+    // Update Job Details
+
+    app.put("/jobs/:id", async (req, res) => {
+      const id = req.params.id;
+      const filter = { _id: objectId(id) };
+      const updatedJob = req.body;
+      console.log(updatedJob);
+      const options = { upsert: true };
+      const updatedDoc = { $set: updatedJob };
+      const result = await jobs.updateOne(filter, updatedDoc, options);
+      res.json(result);
+    });
   } finally {
     //await client.close();
   }
