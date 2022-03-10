@@ -377,6 +377,19 @@ async function run() {
     // Server - Rifat
 
     // Skill Add
+    app.get('/posted-skills/:id', async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: objectId(id) };
+      const result = jobs.findOne(query);
+
+      const { skills } = result;
+
+      if (skills) {
+        res.json(skills);
+      }
+
+    });
+
     app.get('/skills/:email', async (req, res) => {
       const email = req.params.email;
       const query = { email: email };
