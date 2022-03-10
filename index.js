@@ -251,13 +251,17 @@ async function run() {
       console.log(result);
       res.json(result);
     });
-
+    app.get('/users', async (req, res) => {
+      const cursor = userCollection.find({});
+      const user = await cursor.toArray();
+      res.send(user)
+    })
     //admin role get api
     app.get('/users/:email', async (req, res) => {
       const email = req.params.email;
       const query = { email: email };
       const user = await userCollection.findOne(query);
-      let isAdmin = 'user';
+      let isAdmin = 'admin';
       if (user?.role === 'admin') {
         isAdmin = 'admin';
       }
@@ -267,7 +271,7 @@ async function run() {
       else if (user?.role === 'company') {
         isAdmin = 'company';
       }
-
+      console.log(isAdmin);
       res.json({ admin: isAdmin });
     })
 
@@ -417,12 +421,12 @@ async function run() {
         if (isFound === -1) {
           isDisliked = false;
         }
-        
+
         else if (isFound !== -1) {
           isDisliked = true;
         }
 
-        res.json( { isDisliked, dislikes: result?.disliked?.length });
+        res.json({ isDisliked, dislikes: result?.disliked?.length });
       }
     });
 
@@ -488,12 +492,12 @@ async function run() {
         if (isFound === -1) {
           isLiked = false;
         }
-        
+
         else if (isFound !== -1) {
           isLiked = true;
         }
 
-        res.json( { isLiked, likes: result?.liked?.length });
+        res.json({ isLiked, likes: result?.liked?.length });
       }
     });
 
