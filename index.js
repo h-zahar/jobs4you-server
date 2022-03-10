@@ -380,7 +380,8 @@ async function run() {
     app.get('/posted-skills/:id', async (req, res) => {
       const id = req.params.id;
       const query = { _id: objectId(id) };
-      const result = jobs.findOne(query);
+      const result = await jobs.findOne(query);
+      // console.log(result)
 
       const { skills } = result;
 
@@ -393,17 +394,17 @@ async function run() {
     app.get('/skills/:email', async (req, res) => {
       const email = req.params.email;
       const query = { email: email };
-      const result = skills.findOne(query);
-      
-      if (result) {
-        res.json(result);
+      const result = await skills.findOne(query);
+
+      if (result?.skills) {
+        res.json(result.skills);
       }
 
     });
 
     app.put("/skills", async (req, res) => {
       const upsertDoc = req.body;
-      const filter = { email: insertDoc?.email };
+      const filter = { email: upsertDoc?.email };
       const options = { upsert: true };
 
       const upsertedDoc = { 
