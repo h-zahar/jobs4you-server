@@ -401,11 +401,20 @@ async function run() {
 
     });
 
-    app.post("/skills", async (req, res) => {
-      const insertDoc = req.body;
+    app.put("/skills", async (req, res) => {
+      const upsertDoc = req.body;
+      const filter = { email: insertDoc?.email };
+      const options = { upsert: true };
 
-      const result = await skills.insertOne(insertDoc);
-      res.json(result);
+      const upsertedDoc = { 
+        $set: upsertDoc
+      };
+
+      const result = await skills.updateOne(filter, upsertedDoc, options);
+
+      if (result?.acknowledged) {
+        res.json(result);
+      }
     });
 
     // Company Collection
