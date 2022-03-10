@@ -3,9 +3,17 @@ const { MongoClient } = require("mongodb");
 const cors = require("cors");
 const { json } = require("body-parser");
 const fileUpload = require("express-fileupload");
-const socketio = require('socket.io');
-const http = require('http');
-const { addUser, removeUser, getUsers, getUser, getRemainedUsers, getUsersInRoom, getRemainedUsersInRoom } = require('./users');
+const socketio = require("socket.io");
+const http = require("http");
+const {
+  addUser,
+  removeUser,
+  getUsers,
+  getUser,
+  getRemainedUsers,
+  getUsersInRoom,
+  getRemainedUsersInRoom,
+} = require("./users");
 // const multer = require("multer")
 
 const objectId = require("mongodb").ObjectId;
@@ -44,14 +52,14 @@ const io = socketio(server, {
     // allowedHeaders: ["accept-header"],
     methods: ["GET", "POST"],
     // credentials: true
-  }
+  },
 });
 
 // Establishing Connection - Rifat
-io.on('connection', (socket) => {
+io.on("connection", (socket) => {
   // console.log('New connection!');
 
-  socket.on('join', ({ name, room }, callback) => {
+  socket.on("join", ({ name, room }, callback) => {
     const { user, error } = addUser({ id: socket.id, name, room });
     // console.log(user);
 
@@ -59,35 +67,52 @@ io.on('connection', (socket) => {
       return callback(error);
     }
 
-    socket.emit('message', { user: 'admin', text: `hey, welcome to Jobs4You!` });
-    socket.broadcast.to(user.room).emit('message', { user: 'admin', text: `${user.name} has joined!` });
+    socket.emit("message", {
+      user: "admin",
+      text: `hey, welcome to Jobs4You!`,
+    });
+    socket.broadcast
+      .to(user.room)
+      .emit("message", { user: "admin", text: `${user.name} has joined!` });
 
-    socket.emit('getUsers', { allUsers: getUsers() });
+    socket.emit("getUsers", { allUsers: getUsers() });
 
     socket.join(user.room);
 
-    io.to(user.room).emit('roomData', { room: user.room, users: getUsersInRoom(user.id, user.room) });
+    io.to(user.room).emit("roomData", {
+      room: user.room,
+      users: getUsersInRoom(user.id, user.room),
+    });
 
     callback();
   });
 
-  socket.on('sendMessage', (message, callback) => {
+  socket.on("sendMessage", (message, callback) => {
     const user = getUser(socket.id);
-    io.to(user.room).emit('message', { user: user.name, text: message });
-    socket.emit('getUsers', { users: getUsers() });
-    io.to(user.room).emit('roomData', { room: user.room, users: getUsersInRoom(user.id, user.room) });
+    io.to(user.room).emit("message", { user: user.name, text: message });
+    socket.emit("getUsers", { users: getUsers() });
+    io.to(user.room).emit("roomData", {
+      room: user.room,
+      users: getUsersInRoom(user.id, user.room),
+    });
 
     callback();
   });
 
-  socket.on('disconnect', () => {
+  socket.on("disconnect", () => {
     // console.log('User has disconnected');
     const user = getUser(socket.id);
 
     if (user) {
-      io.to(user.room).emit('message', { user: 'admin', text: `${user.name} has left.` });
-      socket.emit('getUsers', { users: getRemainedUsers(user.id) });
-      io.to(user.room).emit('roomData', { room: user.room, users: getRemainedUsersInRoom(user.id, user.room) });
+      io.to(user.room).emit("message", {
+        user: "admin",
+        text: `${user.name} has left.`,
+      });
+      socket.emit("getUsers", { users: getRemainedUsers(user.id) });
+      io.to(user.room).emit("roomData", {
+        room: user.room,
+        users: getRemainedUsersInRoom(user.id, user.room),
+      });
       removeUser();
     }
   });
@@ -187,37 +212,37 @@ async function run() {
     });
 
     // Get RESUME
-    app.get('/resume', async (req, res) => {
+    app.get("/resume", async (req, res) => {
       const cursor = resumeCollection.find({});
       const resume = await cursor.toArray();
-      res.send(resume)
-    })
+      res.send(resume);
+    });
 
     // GET SINGLE RESUME
 
-    app.get('/resume/:id', async (req, res) => {
+    app.get("/resume/:id", async (req, res) => {
       const id = req.params.id;
 
       const query = { _id: objectId(id) };
-      console.log(query)
+      console.log(query);
       const resume = await resumeCollections.findOne(query);
       res.json(resume);
-    })
-    app.post('/resume', async (req, res) => {
+    });
+    app.post("/resume", async (req, res) => {
       const email = req.body.email;
 
       const resume = req.files.resumepdfFile;
       const resumePdf = resume.data;
-      const encodedresumePdf = resumePdf.toString('base64');
-      const resumePdfBuffer = Buffer.from(encodedresumePdf, 'base64');
+      const encodedresumePdf = resumePdf.toString("base64");
+      const resumePdfBuffer = Buffer.from(encodedresumePdf, "base64");
 
       const resumeUpload = {
         email,
         resume: resumePdfBuffer,
-      }
+      };
       const result = await resumeCollection.insertOne(resumeUpload);
       res.send(result);
-      console.log(resumeUpload)
+      console.log(resumeUpload);
 
       // Update Resume API
 
@@ -229,17 +254,19 @@ async function run() {
         const updateDoc = {
           $set: {
             resume: updatedInfo.resume,
-
           },
         };
-        const result = await resumeCollection.updateOne(filter, updateDoc, options)
-        console.log('updating', updatedInfo)
-        res.json(result)
+        const result = await resumeCollection.updateOne(
+          filter,
+          updateDoc,
+          options
+        );
+        console.log("updating", updatedInfo);
+        res.json(result);
       });
-    })
+    });
 
     // End Sadia Code //
-
 
     //shaon code
     //User Registration Post Api
@@ -251,37 +278,39 @@ async function run() {
       console.log(result);
       res.json(result);
     });
-
+    app.get('/users', async (req, res) => {
+      const cursor = userCollection.find({});
+      const user = await cursor.toArray();
+      res.send(user)
+    })
     //admin role get api
-    app.get('/users/:email', async (req, res) => {
+    app.get("/users/:email", async (req, res) => {
       const email = req.params.email;
       const query = { email: email };
       const user = await userCollection.findOne(query);
-      let isAdmin = 'user';
-      if (user?.role === 'admin') {
-        isAdmin = 'admin';
+      let isAdmin = "user";
+      if (user?.role === "admin") {
+        isAdmin = "admin";
+      } else if (user?.role === "seeker") {
+        isAdmin = "seeker";
+      } else if (user?.role === "company") {
+        isAdmin = "company";
       }
-      else if (user?.role === 'seeker') {
-        isAdmin = 'seeker';
-      }
-      else if (user?.role === 'company') {
-        isAdmin = 'company';
-      }
-
+      console.log(isAdmin);
       res.json({ admin: isAdmin });
-    })
+    });
 
     //get all review
-    app.get('/reviews', async (req, res) => {
+    app.get("/reviews", async (req, res) => {
       const cursor = reviewCollection.find({});
 
       const reviews = await cursor.toArray();
 
       res.send(reviews);
-    })
+    });
 
     //Review POST API
-    app.post('/reviews', async (req, res) => {
+    app.post("/reviews", async (req, res) => {
       const review = req.body;
       // console.log('post hitted', service);
       // order.status = 'pending';
@@ -290,9 +319,9 @@ async function run() {
 
       console.log(result);
       res.json(result);
-    })
+    });
     //google sign in user update/put function
-    app.put('/users', async (req, res) => {
+    app.put("/users", async (req, res) => {
       const user = req.body;
       // user.role = 'user';
       console.log(user);
@@ -303,15 +332,13 @@ async function run() {
       res.json(result);
     });
     //make admin
-    app.put('/users/admin', async (req, res) => {
+    app.put("/users/admin", async (req, res) => {
       const user = req.body;
       const filter = { email: user.email };
-      const updateDoc = { $set: { role: 'admin' } };
+      const updateDoc = { $set: { role: "admin" } };
       const result = await userCollection.updateOne(filter, updateDoc);
       res.json(result);
-
-
-    })
+    });
     // Nuzhat's Server
 
     // Post a Job
@@ -334,9 +361,21 @@ async function run() {
       res.json(result);
     });
 
+    // Update field of job details
+
+    app.put("/jobs/:id", async (req, res) => {
+      const id = req.params.id;
+      const filter = { _id: objectId(id) };
+      const updatedJob = req.body;
+      console.log(updatedJob);
+      const options = { upsert: true };
+      const updatedDoc = { $set: updatedJob };
+      const result = await jobs.updateOne(filter, updatedDoc, options);
+      res.json(result);
+    });
 
     // Skill Add
-    app.post('/skills', async (req, res) => {
+    app.post("/skills", async (req, res) => {
       const insertDoc = req.body;
 
       const result = await skills.insertOne(insertDoc);
@@ -344,7 +383,7 @@ async function run() {
     });
 
     // Company Collection
-    app.get('/top', async (req, res) => {
+    app.get("/top", async (req, res) => {
       const query = {};
       const cursor = topCompanies.find(query);
 
@@ -352,18 +391,13 @@ async function run() {
 
       if (result) {
         res.json(result);
-      }
-
-      else {
+      } else {
         res.send([]);
       }
-
     });
 
-
-
     // Faq Post
-    app.get('/customfaq', async (req, res) => {
+    app.get("/customfaq", async (req, res) => {
       const query = {};
       const cursor = faq.find(query);
 
@@ -371,22 +405,19 @@ async function run() {
 
       if (result) {
         res.json(result);
-      }
-
-      else {
+      } else {
         res.send([]);
       }
-
     });
 
-    app.post('/customfaq', async (req, res) => {
+    app.post("/customfaq", async (req, res) => {
       const insertDoc = req.body;
 
       const result = await faq.insertOne(insertDoc);
       res.json(result);
     });
 
-    app.put('/customfaq', async (req, res) => {
+    app.put("/customfaq", async (req, res) => {
       const updated = req.body;
 
       const filter = { _id: objectId(updated._id) };
@@ -394,7 +425,7 @@ async function run() {
       const finalizeDoc = { comment: updated.comment, reply: updated.reply };
 
       const updateDoc = {
-        $set: finalizeDoc
+        $set: finalizeDoc,
       };
 
       const result = await faq.updateOne(filter, updateDoc);
@@ -404,7 +435,7 @@ async function run() {
       }
     });
 
-    app.get('/faqGetDislikes', async (req, res) => {
+    app.get("/faqGetDislikes", async (req, res) => {
       const { id, email } = req.query;
       const query = { _id: objectId(id) };
 
@@ -412,21 +443,21 @@ async function run() {
 
       if (result) {
         let isDisliked = false;
-        const isFound = await result?.disliked?.findIndex(single => single === email);
+        const isFound = await result?.disliked?.findIndex(
+          (single) => single === email
+        );
 
         if (isFound === -1) {
           isDisliked = false;
-        }
-        
-        else if (isFound !== -1) {
+        } else if (isFound !== -1) {
           isDisliked = true;
         }
 
-        res.json( { isDisliked, dislikes: result?.disliked?.length });
+        res.json({ isDisliked, dislikes: result?.disliked?.length });
       }
     });
 
-    app.put('/faqDislike/:email', async (req, res) => {
+    app.put("/faqDislike/:email", async (req, res) => {
       const email = req.params.email;
       const updated = req.body;
 
@@ -440,42 +471,52 @@ async function run() {
         updated.disliked = [];
       }
 
-      const isFound = await updated?.disliked.findIndex(single => single === email);
+      const isFound = await updated?.disliked.findIndex(
+        (single) => single === email
+      );
 
-      const isOppositeFound = await updated?.liked.findIndex(single => single === email);
+      const isOppositeFound = await updated?.liked.findIndex(
+        (single) => single === email
+      );
 
-
-      if (email && (isFound === -1)) {
+      if (email && isFound === -1) {
         if (isOppositeFound !== -1) {
           await updated?.liked.splice(isOppositeFound, isOppositeFound + 1)[0];
         }
 
         await updated?.disliked.push(email);
-        const finalizeDoc = { comment: updated.comment, reply: updated.reply, liked: updated.liked, disliked: updated.disliked };
+        const finalizeDoc = {
+          comment: updated.comment,
+          reply: updated.reply,
+          liked: updated.liked,
+          disliked: updated.disliked,
+        };
         const updateDoc = {
-          $set: finalizeDoc
+          $set: finalizeDoc,
         };
         const result = await faq.updateOne(filter, updateDoc);
 
         res.json(result);
-      }
-
-      else if (email && (isFound !== -1) && updated?.disliked.length) {
+      } else if (email && isFound !== -1 && updated?.disliked.length) {
         await updated?.disliked.splice(isFound, isFound + 1)[0];
 
-        const finalizeDoc = { comment: updated.comment, reply: updated.reply, liked: updated.liked, disliked: updated.disliked };
+        const finalizeDoc = {
+          comment: updated.comment,
+          reply: updated.reply,
+          liked: updated.liked,
+          disliked: updated.disliked,
+        };
 
         const updateDoc = {
-          $set: finalizeDoc
+          $set: finalizeDoc,
         };
         const result = await faq.updateOne(filter, updateDoc);
 
         res.json(result);
       }
-
     });
 
-    app.get('/faqGetLikes', async (req, res) => {
+    app.get("/faqGetLikes", async (req, res) => {
       const { id, email } = req.query;
       const query = { _id: objectId(id) };
 
@@ -483,21 +524,21 @@ async function run() {
 
       if (result) {
         let isLiked = false;
-        const isFound = await result?.liked?.findIndex(single => single === email);
+        const isFound = await result?.liked?.findIndex(
+          (single) => single === email
+        );
 
         if (isFound === -1) {
           isLiked = false;
-        }
-        
-        else if (isFound !== -1) {
+        } else if (isFound !== -1) {
           isLiked = true;
         }
 
-        res.json( { isLiked, likes: result?.liked?.length });
+        res.json({ isLiked, likes: result?.liked?.length });
       }
     });
 
-    app.put('/faqLike/:email', async (req, res) => {
+    app.put("/faqLike/:email", async (req, res) => {
       const email = req.params.email;
       const updated = req.body;
       console.log(email, updated);
@@ -512,147 +553,158 @@ async function run() {
         updated.disliked = [];
       }
 
-      const isFound = await updated?.liked.findIndex(single => single === email);
+      const isFound = await updated?.liked.findIndex(
+        (single) => single === email
+      );
 
-      const isOppositeFound = await updated?.disliked.findIndex(single => single === email);
+      const isOppositeFound = await updated?.disliked.findIndex(
+        (single) => single === email
+      );
 
-
-      if (email && (isFound === -1)) {
+      if (email && isFound === -1) {
         if (isOppositeFound !== -1) {
-          await updated?.disliked.splice(isOppositeFound, isOppositeFound + 1)[0];
+          await updated?.disliked.splice(
+            isOppositeFound,
+            isOppositeFound + 1
+          )[0];
         }
 
         await updated?.liked.push(email);
-        const finalizeDoc = { comment: updated.comment, reply: updated.reply, liked: updated.liked, disliked: updated.disliked };
+        const finalizeDoc = {
+          comment: updated.comment,
+          reply: updated.reply,
+          liked: updated.liked,
+          disliked: updated.disliked,
+        };
         const updateDoc = {
-          $set: finalizeDoc
+          $set: finalizeDoc,
         };
         const result = await faq.updateOne(filter, updateDoc);
 
         res.json(result);
-      }
-
-      else if (email && (isFound !== -1) && updated?.liked.length) {
+      } else if (email && isFound !== -1 && updated?.liked.length) {
         await updated?.liked.splice(isFound, isFound + 1)[0];
 
-        const finalizeDoc = { comment: updated.comment, reply: updated.reply, liked: updated.liked, disliked: updated.disliked };
+        const finalizeDoc = {
+          comment: updated.comment,
+          reply: updated.reply,
+          liked: updated.liked,
+          disliked: updated.disliked,
+        };
         const updateDoc = {
-          $set: finalizeDoc
+          $set: finalizeDoc,
         };
         const result = await faq.updateOne(filter, updateDoc);
 
         res.json(result);
       }
-
     });
     // ****** Raju **********//
     // Post gov jobs
-    app.post('/addgovjob', async (req, res) => {
-      const jobInfo = req.body
-      const insertedJob = await govJobsCollection.insertOne(jobInfo)
-      res.json(insertedJob)
-    })
+    app.post("/addgovjob", async (req, res) => {
+      const jobInfo = req.body;
+      const insertedJob = await govJobsCollection.insertOne(jobInfo);
+      res.json(insertedJob);
+    });
     // get gov jobs
-    app.get('/allgovjobs', async (req, res) => {
+    app.get("/allgovjobs", async (req, res) => {
       const getAllJobs = await govJobsCollection.find({}).toArray();
-      res.json(getAllJobs)
-    })
+      res.json(getAllJobs);
+    });
     //   get single job
-    app.get('/allgovjobs/:id', async (req, res) => {
+    app.get("/allgovjobs/:id", async (req, res) => {
       const id = req.params.id;
       const query = { _id: objectId(id) };
-      console.log(query)
+      console.log(query);
       const job = await govJobsCollection.findOne(query);
       res.json(job);
-    })
+    });
     // Edit gov jobs
-    app.put('/govjobs/:id', async (req, res) => {
+    app.put("/govjobs/:id", async (req, res) => {
       const filter = { _id: objectId(req.params.id) };
-      console.log(filter)
+      console.log(filter);
       const updateStatus = {
-
         $set: {
           organization: req.body.organization,
           position: req.body.position,
           deadline: req.body.deadline,
-          vacancy: req.body.vacancy
-
+          vacancy: req.body.vacancy,
         },
-
       };
-      const updateResult = await govJobsCollection.updateOne(filter, updateStatus)
-      console.log(updateResult)
-      res.json(updateResult)
-    })
+      const updateResult = await govJobsCollection.updateOne(
+        filter,
+        updateStatus
+      );
+      console.log(updateResult);
+      res.json(updateResult);
+    });
     // create pdf ( Raju )
-    app.post('/createPdf', (req, res) => {
-      console.log(req.body)
-      pdf.create(pdfTemplate(req.body), {}).toFile('result.pdf', (err) => {
+    app.post("/createPdf", (req, res) => {
+      console.log(req.body);
+      pdf.create(pdfTemplate(req.body), {}).toFile("result.pdf", (err) => {
         if (err) {
           res.send(Promise.reject());
         }
 
         res.send(Promise.resolve());
-        console.log(Promise.resolve())
+        console.log(Promise.resolve());
       });
     });
 
     // get pdf
 
-    app.get('/fetch-pdf', (req, res) => {
-      res.sendFile(`${__dirname}/result.pdf`)
-    })
+    app.get("/fetch-pdf", (req, res) => {
+      res.sendFile(`${__dirname}/result.pdf`);
+    });
 
     // Job-seekers && recruiter's profile
-    app.post('/addProfile', async (req, res) => {
-      const profileInfo = req.body
-      console.log(profileInfo, 'hit the api')
+    app.post("/addProfile", async (req, res) => {
+      const profileInfo = req.body;
+      console.log(profileInfo, "hit the api");
       let insertedProfile;
-      if (profileInfo.role.toLowerCase() == 'candidate') {
-        insertedProfile = await candidatesCollection.insertOne(profileInfo)
+      if (profileInfo.role.toLowerCase() == "candidate") {
+        insertedProfile = await candidatesCollection.insertOne(profileInfo);
       } else {
-        insertedProfile = await employersCollection.insertOne(profileInfo)
+        insertedProfile = await employersCollection.insertOne(profileInfo);
       }
-      res.json(insertedProfile)
-    })
+      res.json(insertedProfile);
+    });
     // All profile
-    app.get('/allprofiles', async (req, res) => {
+    app.get("/allprofiles", async (req, res) => {
       const allCandidates = await candidatesCollection.find({}).toArray();
-      res.json(allCandidates)
-    })
+      res.json(allCandidates);
+    });
     //   get single profile
-    app.get('/profile/:id', async (req, res) => {
+    app.get("/profile/:id", async (req, res) => {
       const id = req.params.id;
 
       const query = { _id: objectId(id) };
-      console.log(query)
+      console.log(query);
       const candidate = await candidatesCollection.findOne(query);
       res.json(candidate);
-    })
+    });
 
     // Edit profile
-    app.put('/singleProfile/:id', async (req, res) => {
+    app.put("/singleProfile/:id", async (req, res) => {
       const filter = { _id: objectId(req.params.id) };
-      console.log(filter)
+      console.log(filter);
       const updateStatus = {
-
         $set: {
           fname: req.body.fname,
           pEmail: req.body.pEmail,
           pContact: req.body.pContact,
-          lname: req.body.lname
-
+          lname: req.body.lname,
         },
-
       };
-      const updateResult = await candidatesCollection.updateOne(filter, updateStatus)
-      console.log(updateResult)
-      res.json(updateResult)
-    })
+      const updateResult = await candidatesCollection.updateOne(
+        filter,
+        updateStatus
+      );
+      console.log(updateResult);
+      res.json(updateResult);
+    });
 
     // ****** Raju **********//
-
-
   } finally {
     //await client.close();
   }
