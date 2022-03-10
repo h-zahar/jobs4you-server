@@ -374,7 +374,20 @@ async function run() {
       res.json(result);
     });
 
+    // Server - Rifat
+
     // Skill Add
+    app.get('/skills/:email', async (req, res) => {
+      const email = req.params.email;
+      const query = { email: email };
+      const result = skills.findOne(query);
+      
+      if (result) {
+        res.json(result);
+      }
+
+    });
+
     app.post("/skills", async (req, res) => {
       const insertDoc = req.body;
 
