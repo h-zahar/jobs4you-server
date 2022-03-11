@@ -102,10 +102,10 @@ async function run() {
     const resumeCollection = database.collection("resumes");
     // ... Raju's DB && Collection
     const profileDB = client.db("AllProfiles");
-        const govJobsCollection = database.collection("Gov-jobs");
-        const candidatesCollection = profileDB.collection("CandidatesProfile");
-        const employersCollection = profileDB.collection("EmployersProfile");
-//............
+    const govJobsCollection = database.collection("Gov-jobs");
+    const candidatesCollection = profileDB.collection("CandidatesProfile");
+    const employersCollection = profileDB.collection("EmployersProfile");
+    //............
 
     const skills = database.collection("skills");
 
@@ -150,6 +150,10 @@ async function run() {
       res.json(apply);
     });
     app.post("/applyList", async (req, res) => {
+      const job = req.body.job;
+      const jobLocation = req.body.jobLocation
+      const employmentStatus = req.body.employmentStatus;
+      const image = req.body.image;
       const firstName = req.body.firstName;
       const lastName = req.body.lastName;
       const dob = req.body.dob;
@@ -168,6 +172,10 @@ async function run() {
       const coverLetterPdfBuffer = Buffer.from(encodedcoverletterPdf, "base64");
 
       const apply = {
+        job,
+        jobLocation,
+        employmentStatus,
+        image,
         firstName,
         lastName,
         dob,
@@ -389,111 +397,111 @@ async function run() {
 
     });
     // ****** Raju **********//
-// Post gov jobs
-app.post('/addgovjob', async(req,res)=>{
-  const jobInfo=req.body
-  const insertedJob= await govJobsCollection.insertOne(jobInfo)
-  res.json(insertedJob)
-})
-// get gov jobs
-app.get('/allgovjobs', async(req,res)=>{
-  const getAllJobs=await govJobsCollection.find({}).toArray();
-  res.json(getAllJobs)
-})
-//   get single job
-app.get('/allgovjobs/:id', async (req, res) => {
-const id = req.params.id;
-const query = { _id: objectId(id) };
-console.log(query)
-const job = await govJobsCollection.findOne(query);
-res.json(job);
-})
-// Edit gov jobs
-app.put('/govjobs/:id',async(req,res)=>{
-const filter = { _id:objectId(req.params.id)};
-console.log(filter)
-const updateStatus = {
+    // Post gov jobs
+    app.post('/addgovjob', async (req, res) => {
+      const jobInfo = req.body
+      const insertedJob = await govJobsCollection.insertOne(jobInfo)
+      res.json(insertedJob)
+    })
+    // get gov jobs
+    app.get('/allgovjobs', async (req, res) => {
+      const getAllJobs = await govJobsCollection.find({}).toArray();
+      res.json(getAllJobs)
+    })
+    //   get single job
+    app.get('/allgovjobs/:id', async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: objectId(id) };
+      console.log(query)
+      const job = await govJobsCollection.findOne(query);
+      res.json(job);
+    })
+    // Edit gov jobs
+    app.put('/govjobs/:id', async (req, res) => {
+      const filter = { _id: objectId(req.params.id) };
+      console.log(filter)
+      const updateStatus = {
 
-$set: {
-organization:req.body.organization,
-position:req.body.position,
-deadline:req.body.deadline,
-vacancy:req.body.vacancy
+        $set: {
+          organization: req.body.organization,
+          position: req.body.position,
+          deadline: req.body.deadline,
+          vacancy: req.body.vacancy
 
-},
+        },
 
-};
-const updateResult=await govJobsCollection.updateOne(filter,updateStatus) 
-console.log(updateResult)
-res.json(updateResult)
-})
-// create pdf ( Raju )
-app.post('/createPdf', (req, res) => {
-console.log(req.body)
-pdf.create(pdfTemplate(req.body), {}).toFile('result.pdf', (err) => {
-    if(err) {
-        res.send(Promise.reject());
-    }
+      };
+      const updateResult = await govJobsCollection.updateOne(filter, updateStatus)
+      console.log(updateResult)
+      res.json(updateResult)
+    })
+    // create pdf ( Raju )
+    app.post('/createPdf', (req, res) => {
+      console.log(req.body)
+      pdf.create(pdfTemplate(req.body), {}).toFile('result.pdf', (err) => {
+        if (err) {
+          res.send(Promise.reject());
+        }
 
-    res.send(Promise.resolve());
-    console.log(Promise.resolve())
-});
-});
+        res.send(Promise.resolve());
+        console.log(Promise.resolve())
+      });
+    });
 
-// get pdf
+    // get pdf
 
-app.get('/fetch-pdf', (req, res) => {
-res.sendFile(`${__dirname}/result.pdf`)
-})
+    app.get('/fetch-pdf', (req, res) => {
+      res.sendFile(`${__dirname}/result.pdf`)
+    })
 
-// Job-seekers && recruiter's profile
-app.post('/addProfile', async(req,res)=>{
-const profileInfo=req.body
-console.log(profileInfo,'hit the api')
-let insertedProfile;
-if(profileInfo.role.toLowerCase()=='candidate'){
-insertedProfile= await candidatesCollection.insertOne(profileInfo)
-}else{
-insertedProfile= await employersCollection.insertOne(profileInfo)
-}
-res.json(insertedProfile)
-})
-// All profile
-app.get('/allprofiles', async(req,res)=>{
-const allCandidates= await candidatesCollection.find({}).toArray();
-res.json(allCandidates)
-})
-//   get single profile
-app.get('/profile/:id', async (req, res) => {
-const id = req.params.id;
+    // Job-seekers && recruiter's profile
+    app.post('/addProfile', async (req, res) => {
+      const profileInfo = req.body
+      console.log(profileInfo, 'hit the api')
+      let insertedProfile;
+      if (profileInfo.role.toLowerCase() == 'candidate') {
+        insertedProfile = await candidatesCollection.insertOne(profileInfo)
+      } else {
+        insertedProfile = await employersCollection.insertOne(profileInfo)
+      }
+      res.json(insertedProfile)
+    })
+    // All profile
+    app.get('/allprofiles', async (req, res) => {
+      const allCandidates = await candidatesCollection.find({}).toArray();
+      res.json(allCandidates)
+    })
+    //   get single profile
+    app.get('/profile/:id', async (req, res) => {
+      const id = req.params.id;
 
-const query = { _id: objectId(id) };
-console.log(query)
-const candidate = await candidatesCollection.findOne(query);
-res.json(candidate);
-})
+      const query = { _id: objectId(id) };
+      console.log(query)
+      const candidate = await candidatesCollection.findOne(query);
+      res.json(candidate);
+    })
 
-// Edit profile
-app.put('/singleProfile/:id',async(req,res)=>{
-const filter = { _id:objectId(req.params.id)};
-console.log(filter)
-const updateStatus = {
+    // Edit profile
+    app.put('/singleProfile/:id', async (req, res) => {
+      const filter = { _id: objectId(req.params.id) };
+      console.log(filter)
+      const updateStatus = {
 
-$set: {
-fname:req.body.fname,
-pEmail:req.body.pEmail,
-pContact:req.body.pContact,
-lname:req.body.lname
+        $set: {
+          fname: req.body.fname,
+          pEmail: req.body.pEmail,
+          pContact: req.body.pContact,
+          lname: req.body.lname
 
-},
+        },
 
-};
-const updateResult=await candidatesCollection.updateOne(filter,updateStatus) 
-console.log(updateResult)
-res.json(updateResult)
-})
+      };
+      const updateResult = await candidatesCollection.updateOne(filter, updateStatus)
+      console.log(updateResult)
+      res.json(updateResult)
+    })
 
-// ****** Raju **********//
+    // ****** Raju **********//
 
 
   } finally {
