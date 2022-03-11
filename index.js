@@ -310,6 +310,25 @@ async function run() {
       res.json({ admin: isAdmin });
     });
 
+    //admin role get api
+    app.get('/users/:email', async (req, res) => {
+      const email = req.params.email;
+      const query = { email: email };
+      const user = await userCollection.findOne(query);
+      let isAdmin = 'user';
+      if (user?.role === 'admin') {
+        isAdmin = 'admin';
+      }
+      else if (user?.role === 'seeker') {
+        isAdmin = 'seeker';
+      }
+      else if (user?.role === 'company') {
+        isAdmin = 'company';
+      }
+
+      res.json({ admin: isAdmin });
+    })
+
     //get all review
     app.get("/reviews", async (req, res) => {
       const cursor = reviewCollection.find({});
@@ -506,6 +525,7 @@ async function run() {
     app.put("/faqDislike/:email", async (req, res) => {
       const email = req.params.email;
       const updated = req.body;
+      console.log(email, updated);
 
       const filter = { _id: objectId(updated?._id) };
 
@@ -704,17 +724,16 @@ async function run() {
     });
 
     // Job-seekers && recruiter's profile
-    app.post("/addProfile", async (req, res) => {
-      const profileInfo = req.body;
-      console.log(profileInfo, "hit the api");
+    app.post('/addProfile', async(req,res)=>{
+      const profileInfo=req.body
       let insertedProfile;
-      if (profileInfo.role.toLowerCase() == "candidate") {
-        insertedProfile = await candidatesCollection.insertOne(profileInfo);
-      } else {
-        insertedProfile = await employersCollection.insertOne(profileInfo);
-      }
-      res.json(insertedProfile);
-    });
+     if(profileInfo.pEmail){
+       insertedProfile= await candidatesCollection.insertOne(profileInfo)
+     }else{
+      insertedProfile= await employersCollection.insertOne(profileInfo)
+     }
+      res.json(insertedProfile)
+    })
     // All profile
     app.get("/allprofiles", async (req, res) => {
       const allCandidates = await candidatesCollection.find({}).toArray();
@@ -729,7 +748,23 @@ async function run() {
       const candidate = await candidatesCollection.findOne(query);
       res.json(candidate);
     });
-
+    app.get('/individualCandidate/:email', async (req, res) => {
+      const queryEmail= req.params.email;
+      console.log(queryEmail)
+      const query = {pEmail:queryEmail};
+      console.log(query)
+      const candidate = await candidatesCollection.findOne(query);
+      res.json(candidate);
+      })
+      //   get single companyProfile by email
+      app.get('/individualCompany/:email', async (req, res) => {
+      const queryEmail= req.params.email;
+      console.log(queryEmail)
+      const query = {email:queryEmail};
+      console.log(query)
+      const candidate = await employersCollection.findOne(query);
+      res.json(candidate);
+      })
     // Edit profile
     app.put("/singleProfile/:id", async (req, res) => {
       const filter = { _id: objectId(req.params.id) };
