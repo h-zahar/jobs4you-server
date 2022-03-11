@@ -288,7 +288,7 @@ async function run() {
       const email = req.params.email;
       const query = { email: email };
       const user = await userCollection.findOne(query);
-      let isAdmin = "user";
+      let isAdmin = "seeker";
       if (user?.role === "admin") {
         isAdmin = "admin";
       } else if (user?.role === "seeker") {
@@ -323,8 +323,8 @@ async function run() {
     //google sign in user update/put function
     app.put("/users", async (req, res) => {
       const user = req.body;
-      // user.role = 'user';
-      console.log(user);
+      // user.role = 'seeker';
+      console.log('this is google user', user);
       const filter = { email: user.email };
       const options = { upsert: true };
       const updateDoc = { $set: user };
