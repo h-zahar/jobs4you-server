@@ -1,0 +1,402 @@
+0 verbose cli [
+0 verbose cli   'C:\\Program Files\\nodejs\\node.exe',
+0 verbose cli   'C:\\Users\\nupa_\\AppData\\Roaming\\npm\\node_modules\\npm\\bin\\npm-cli.js',
+0 verbose cli   'i'
+0 verbose cli ]
+1 info using npm@8.5.1
+2 info using node@v16.14.0
+3 timing npm:load:whichnode Completed in 0ms
+4 timing config:load:defaults Completed in 1ms
+5 timing config:load:file:C:\Users\nupa_\AppData\Roaming\npm\node_modules\npm\npmrc Completed in 3ms
+6 timing config:load:builtin Completed in 3ms
+7 timing config:load:cli Completed in 1ms
+8 timing config:load:env Completed in 1ms
+9 timing config:load:file:C:\WebDev_Batch04\End_Game\Final_Team_Project\jobs4you-server\.npmrc Completed in 0ms
+10 timing config:load:project Completed in 2ms
+11 timing config:load:file:C:\Users\nupa_\.npmrc Completed in 0ms
+12 timing config:load:user Completed in 1ms
+13 timing config:load:file:C:\Users\nupa_\AppData\Roaming\npm\etc\npmrc Completed in 0ms
+14 timing config:load:global Completed in 0ms
+15 timing config:load:validate Completed in 1ms
+16 timing config:load:credentials Completed in 1ms
+17 timing config:load:setEnvs Completed in 0ms
+18 timing config:load Completed in 11ms
+19 timing npm:load:configload Completed in 11ms
+20 timing npm:load:setTitle Completed in 1ms
+21 timing config:load:flatten Completed in 2ms
+22 timing npm:load:display Completed in 3ms
+23 verbose logfile C:\WebDev_Batch04\End_Game\Final_Team_Project\jobs4you-server\tmpnodejsnpm-cache\_logs\2022-03-09T20_54_27_900Z-debug-0.log
+24 timing npm:load:logFile Completed in 7ms
+25 timing npm:load:timers Completed in 0ms
+26 timing npm:load:configScope Completed in 0ms
+27 timing npm:load Completed in 23ms
+28 timing arborist:ctor Completed in 1ms
+29 verbose shrinkwrap failed to load node_modules/.package-lock.json out of date, updated: node_modules
+30 timing idealTree:init Completed in 73ms
+31 warn old lockfile
+31 warn old lockfile The package-lock.json file was created with an old version of npm,
+31 warn old lockfile so supplemental metadata must be fetched from the registry.
+31 warn old lockfile
+31 warn old lockfile This is a one-time fix-up, please be patient...
+31 warn old lockfile
+32 silly inflate node_modules/@socket.io/base64-arraybuffer
+33 silly inflate node_modules/@types/component-emitter
+34 silly inflate node_modules/@types/cookie
+35 silly inflate node_modules/@types/cors
+36 silly inflate node_modules/@types/node
+37 silly inflate node_modules/@types/webidl-conversions
+38 silly inflate node_modules/@types/whatwg-url
+39 silly inflate node_modules/accepts
+40 silly inflate node_modules/append-field
+41 silly inflate node_modules/array-flatten
+42 silly inflate node_modules/base64-js
+43 silly inflate node_modules/base64id
+44 http fetch GET 200 https://registry.npmjs.org/base64id 151ms (cache miss)
+45 silly inflate node_modules/body-parser
+46 http fetch GET 200 https://registry.npmjs.org/@types%2fcors 167ms (cache miss)
+47 silly inflate node_modules/body-parser/node_modules/qs
+48 http fetch GET 200 https://registry.npmjs.org/@types%2fcookie 178ms (cache miss)
+49 silly inflate node_modules/bson
+50 http fetch GET 200 https://registry.npmjs.org/@types%2fcomponent-emitter 197ms (cache miss)
+51 silly inflate node_modules/buffer
+52 http fetch GET 200 https://registry.npmjs.org/body-parser 53ms (cache revalidated)
+53 silly inflate node_modules/buffer-from
+54 http fetch GET 200 https://registry.npmjs.org/array-flatten 217ms (cache revalidated)
+55 silly inflate node_modules/busboy
+56 http fetch GET 200 https://registry.npmjs.org/@types%2fwebidl-conversions 221ms (cache revalidated)
+57 silly inflate node_modules/bytes
+58 http fetch GET 200 https://registry.npmjs.org/append-field 224ms (cache revalidated)
+59 silly inflate node_modules/component-emitter
+60 http fetch GET 200 https://registry.npmjs.org/accepts 226ms (cache revalidated)
+61 silly inflate node_modules/concat-stream
+62 http fetch GET 200 https://registry.npmjs.org/bson 62ms (cache revalidated)
+63 silly inflate node_modules/concat-stream/node_modules/isarray
+64 http fetch GET 200 https://registry.npmjs.org/qs 76ms (cache updated)
+65 silly inflate node_modules/concat-stream/node_modules/readable-stream
+66 http fetch GET 200 https://registry.npmjs.org/@types%2fwhatwg-url 248ms (cache revalidated)
+67 silly inflate node_modules/concat-stream/node_modules/safe-buffer
+68 http fetch GET 200 https://registry.npmjs.org/buffer 56ms (cache revalidated)
+69 silly inflate node_modules/concat-stream/node_modules/string_decoder
+70 http fetch GET 200 https://registry.npmjs.org/base64-js 269ms (cache revalidated)
+71 silly inflate node_modules/content-disposition
+72 http fetch GET 200 https://registry.npmjs.org/buffer-from 75ms (cache revalidated)
+73 silly inflate node_modules/content-type
+74 http fetch GET 200 https://registry.npmjs.org/component-emitter 62ms (cache miss)
+75 silly inflate node_modules/cookie
+76 http fetch GET 200 https://registry.npmjs.org/bytes 76ms (cache revalidated)
+77 silly inflate node_modules/cookie-signature
+78 http fetch GET 200 https://registry.npmjs.org/@socket.io%2fbase64-arraybuffer 304ms (cache miss)
+79 silly inflate node_modules/core-util-is
+80 http fetch GET 200 https://registry.npmjs.org/concat-stream 120ms (cache revalidated)
+81 silly inflate node_modules/cors
+82 http fetch GET 200 https://registry.npmjs.org/string_decoder 100ms (cache revalidated)
+83 silly inflate node_modules/debug
+84 http fetch GET 200 https://registry.npmjs.org/safe-buffer 107ms (cache revalidated)
+85 silly inflate node_modules/denque
+86 http fetch GET 200 https://registry.npmjs.org/content-disposition 85ms (cache revalidated)
+87 silly inflate node_modules/depd
+88 http fetch GET 200 https://registry.npmjs.org/busboy 137ms (cache revalidated)
+89 silly inflate node_modules/destroy
+90 http fetch GET 200 https://registry.npmjs.org/readable-stream 115ms (cache revalidated)
+91 silly inflate node_modules/dicer
+92 http fetch GET 200 https://registry.npmjs.org/isarray 120ms (cache revalidated)
+93 silly inflate node_modules/dotenv
+94 http fetch GET 200 https://registry.npmjs.org/cookie 125ms (cache revalidated)
+95 silly inflate node_modules/ee-first
+96 http fetch GET 200 https://registry.npmjs.org/content-type 131ms (cache revalidated)
+97 silly inflate node_modules/encodeurl
+98 http fetch GET 200 https://registry.npmjs.org/cookie-signature 122ms (cache revalidated)
+99 silly inflate node_modules/engine.io
+100 http fetch GET 200 https://registry.npmjs.org/core-util-is 121ms (cache revalidated)
+101 silly inflate node_modules/engine.io/node_modules/debug
+102 http fetch GET 200 https://registry.npmjs.org/@types%2fnode 427ms (cache updated)
+103 silly inflate node_modules/engine.io/node_modules/ms
+104 http fetch GET 200 https://registry.npmjs.org/cors 89ms (cache revalidated)
+105 silly inflate node_modules/engine.io-parser
+106 http fetch GET 200 https://registry.npmjs.org/denque 96ms (cache revalidated)
+107 silly inflate node_modules/escape-html
+108 http fetch GET 200 https://registry.npmjs.org/debug 103ms (cache revalidated)
+109 silly inflate node_modules/etag
+110 silly inflate node_modules/express
+111 http fetch GET 200 https://registry.npmjs.org/destroy 105ms (cache updated)
+112 silly inflate node_modules/express/node_modules/body-parser
+113 silly inflate node_modules/express/node_modules/bytes
+114 silly inflate node_modules/express/node_modules/raw-body
+115 http fetch GET 200 https://registry.npmjs.org/depd 146ms (cache revalidated)
+116 silly inflate node_modules/express-fileupload
+117 http fetch GET 200 https://registry.npmjs.org/dicer 148ms (cache revalidated)
+118 silly inflate node_modules/finalhandler
+119 http fetch GET 200 https://registry.npmjs.org/ee-first 94ms (cache revalidated)
+120 silly inflate node_modules/forwarded
+121 http fetch GET 200 https://registry.npmjs.org/encodeurl 94ms (cache revalidated)
+122 silly inflate node_modules/fresh
+123 http fetch GET 200 https://registry.npmjs.org/dotenv 164ms (cache updated)
+124 silly inflate node_modules/http-errors
+125 http fetch GET 200 https://registry.npmjs.org/escape-html 77ms (cache revalidated)
+126 silly inflate node_modules/iconv-lite
+127 http fetch GET 200 https://registry.npmjs.org/engine.io 115ms (cache miss)
+128 silly inflate node_modules/ieee754
+129 http fetch GET 200 https://registry.npmjs.org/ms 114ms (cache updated)
+130 silly inflate node_modules/inherits
+131 http fetch GET 200 https://registry.npmjs.org/engine.io-parser 109ms (cache miss)
+132 silly inflate node_modules/ip
+133 http fetch GET 200 https://registry.npmjs.org/etag 103ms (cache revalidated)
+134 silly inflate node_modules/ipaddr.js
+135 http fetch GET 200 https://registry.npmjs.org/express 115ms (cache updated)
+136 silly inflate node_modules/isarray
+137 silly inflate node_modules/media-typer
+138 http fetch GET 200 https://registry.npmjs.org/forwarded 89ms (cache revalidated)
+139 silly inflate node_modules/memory-pager
+140 http fetch GET 200 https://registry.npmjs.org/express-fileupload 95ms (cache revalidated)
+141 silly inflate node_modules/merge-descriptors
+142 http fetch GET 200 https://registry.npmjs.org/fresh 90ms (cache revalidated)
+143 silly inflate node_modules/methods
+144 http fetch GET 200 https://registry.npmjs.org/finalhandler 99ms (cache revalidated)
+145 silly inflate node_modules/mime
+146 http fetch GET 200 https://registry.npmjs.org/iconv-lite 77ms (cache revalidated)
+147 silly inflate node_modules/mime-db
+148 http fetch GET 200 https://registry.npmjs.org/raw-body 143ms (cache updated)
+149 silly inflate node_modules/mime-types
+150 http fetch GET 200 https://registry.npmjs.org/ieee754 75ms (cache revalidated)
+151 silly inflate node_modules/minimist
+152 http fetch GET 200 https://registry.npmjs.org/ip 68ms (cache revalidated)
+153 silly inflate node_modules/mkdirp
+154 http fetch GET 200 https://registry.npmjs.org/inherits 82ms (cache revalidated)
+155 silly inflate node_modules/mongodb
+156 http fetch GET 200 https://registry.npmjs.org/ipaddr.js 69ms (cache revalidated)
+157 silly inflate node_modules/mongodb-connection-string-url
+158 http fetch GET 200 https://registry.npmjs.org/http-errors 107ms (cache revalidated)
+159 silly inflate node_modules/ms
+160 silly inflate node_modules/multer
+161 http fetch GET 200 https://registry.npmjs.org/media-typer 76ms (cache revalidated)
+162 silly inflate node_modules/multer/node_modules/busboy
+163 silly inflate node_modules/multer/node_modules/dicer
+164 silly inflate node_modules/negotiator
+165 http fetch GET 200 https://registry.npmjs.org/memory-pager 66ms (cache revalidated)
+166 silly inflate node_modules/object-assign
+167 http fetch GET 200 https://registry.npmjs.org/merge-descriptors 74ms (cache revalidated)
+168 silly inflate node_modules/on-finished
+169 http fetch GET 200 https://registry.npmjs.org/methods 93ms (cache revalidated)
+170 silly inflate node_modules/parseurl
+171 http fetch GET 200 https://registry.npmjs.org/mkdirp 82ms (cache revalidated)
+172 silly inflate node_modules/path-to-regexp
+173 http fetch GET 200 https://registry.npmjs.org/mime 93ms (cache revalidated)
+174 silly inflate node_modules/process-nextick-args
+175 http fetch GET 200 https://registry.npmjs.org/mime-types 90ms (cache revalidated)
+176 silly inflate node_modules/proxy-addr
+177 http fetch GET 200 https://registry.npmjs.org/mime-db 94ms (cache revalidated)
+178 silly inflate node_modules/punycode
+179 http fetch GET 200 https://registry.npmjs.org/minimist 93ms (cache revalidated)
+180 silly inflate node_modules/qs
+181 silly inflate node_modules/range-parser
+182 http fetch GET 200 https://registry.npmjs.org/negotiator 49ms (cache revalidated)
+183 silly inflate node_modules/raw-body
+184 silly inflate node_modules/readable-stream
+185 silly inflate node_modules/safe-buffer
+186 silly inflate node_modules/safer-buffer
+187 http fetch GET 200 https://registry.npmjs.org/multer 76ms (cache revalidated)
+188 silly inflate node_modules/saslprep
+189 http fetch GET 200 https://registry.npmjs.org/object-assign 51ms (cache revalidated)
+190 silly inflate node_modules/send
+191 http fetch GET 200 https://registry.npmjs.org/on-finished 60ms (cache revalidated)
+192 silly inflate node_modules/send/node_modules/ms
+193 silly inflate node_modules/serve-static
+194 http fetch GET 200 https://registry.npmjs.org/proxy-addr 61ms (cache revalidated)
+195 silly inflate node_modules/setprototypeof
+196 http fetch GET 200 https://registry.npmjs.org/process-nextick-args 67ms (cache revalidated)
+197 silly inflate node_modules/smart-buffer
+198 http fetch GET 200 https://registry.npmjs.org/parseurl 71ms (cache revalidated)
+199 silly inflate node_modules/socket.io
+200 http fetch GET 200 https://registry.npmjs.org/send 53ms (cache revalidated)
+201 silly inflate node_modules/socket.io/node_modules/debug
+202 silly inflate node_modules/socket.io/node_modules/ms
+203 silly inflate node_modules/socket.io-adapter
+204 http fetch GET 200 https://registry.npmjs.org/range-parser 76ms (cache revalidated)
+205 silly inflate node_modules/socket.io-parser
+206 http fetch GET 200 https://registry.npmjs.org/path-to-regexp 88ms (cache revalidated)
+207 silly inflate node_modules/socket.io-parser/node_modules/debug
+208 silly inflate node_modules/socket.io-parser/node_modules/ms
+209 silly inflate node_modules/socks
+210 http fetch GET 200 https://registry.npmjs.org/punycode 90ms (cache revalidated)
+211 silly inflate node_modules/sparse-bitfield
+212 http fetch GET 200 https://registry.npmjs.org/saslprep 79ms (cache revalidated)
+213 silly inflate node_modules/statuses
+214 http fetch GET 200 https://registry.npmjs.org/safer-buffer 83ms (cache revalidated)
+215 silly inflate node_modules/streamsearch
+216 http fetch GET 200 https://registry.npmjs.org/serve-static 61ms (cache revalidated)
+217 silly inflate node_modules/string_decoder
+218 silly inflate node_modules/toidentifier
+219 http fetch GET 200 https://registry.npmjs.org/mongodb 188ms (cache updated)
+220 silly inflate node_modules/tr46
+221 http fetch GET 200 https://registry.npmjs.org/setprototypeof 67ms (cache revalidated)
+222 silly inflate node_modules/type-is
+223 http fetch GET 200 https://registry.npmjs.org/socket.io 65ms (cache miss)
+224 silly inflate node_modules/typedarray
+225 http fetch GET 200 https://registry.npmjs.org/socket.io-adapter 69ms (cache miss)
+226 silly inflate node_modules/unpipe
+227 http fetch GET 200 https://registry.npmjs.org/socket.io-parser 65ms (cache miss)
+228 silly inflate node_modules/util-deprecate
+229 http fetch GET 200 https://registry.npmjs.org/statuses 63ms (cache revalidated)
+230 silly inflate node_modules/utils-merge
+231 http fetch GET 200 https://registry.npmjs.org/sparse-bitfield 71ms (cache revalidated)
+232 silly inflate node_modules/vary
+233 http fetch GET 200 https://registry.npmjs.org/socks 77ms (cache revalidated)
+234 silly inflate node_modules/webidl-conversions
+235 http fetch GET 200 https://registry.npmjs.org/streamsearch 76ms (cache revalidated)
+236 silly inflate node_modules/whatwg-url
+237 http fetch GET 200 https://registry.npmjs.org/toidentifier 71ms (cache revalidated)
+238 silly inflate node_modules/ws
+239 http fetch GET 200 https://registry.npmjs.org/smart-buffer 109ms (cache revalidated)
+240 silly inflate node_modules/xtend
+241 http fetch GET 200 https://registry.npmjs.org/tr46 58ms (cache revalidated)
+242 http fetch GET 200 https://registry.npmjs.org/type-is 54ms (cache revalidated)
+243 http fetch GET 200 https://registry.npmjs.org/typedarray 56ms (cache revalidated)
+244 http fetch GET 200 https://registry.npmjs.org/unpipe 51ms (cache revalidated)
+245 http fetch GET 200 https://registry.npmjs.org/util-deprecate 46ms (cache revalidated)
+246 http fetch GET 200 https://registry.npmjs.org/xtend 46ms (cache revalidated)
+247 http fetch GET 200 https://registry.npmjs.org/whatwg-url 58ms (cache revalidated)
+248 http fetch GET 200 https://registry.npmjs.org/utils-merge 72ms (cache revalidated)
+249 http fetch GET 200 https://registry.npmjs.org/webidl-conversions 67ms (cache revalidated)
+250 http fetch GET 200 https://registry.npmjs.org/ws 63ms (cache miss)
+251 http fetch GET 200 https://registry.npmjs.org/vary 78ms (cache revalidated)
+252 http fetch GET 200 https://registry.npmjs.org/mongodb-connection-string-url 328ms (cache revalidated)
+253 timing idealTree:inflate Completed in 972ms
+254 timing idealTree:userRequests Completed in 0ms
+255 silly idealTree buildDeps
+256 timing idealTree:#root Completed in 0ms
+257 timing idealTree:buildDeps Completed in 1ms
+258 timing idealTree:fixDepFlags Completed in 1ms
+259 timing idealTree Completed in 1048ms
+260 timing reify:loadTrees Completed in 1048ms
+261 timing reify:diffTrees Completed in 3ms
+262 silly reify moves {}
+263 timing reify:retireShallow Completed in 0ms
+264 timing reify:createSparse Completed in 1ms
+265 timing reify:loadBundles Completed in 0ms
+266 silly audit bulk request {
+266 silly audit   '@socket.io/base64-arraybuffer': [ '1.0.2' ],
+266 silly audit   '@types/component-emitter': [ '1.2.11' ],
+266 silly audit   '@types/cookie': [ '0.4.1' ],
+266 silly audit   '@types/cors': [ '2.8.12' ],
+266 silly audit   '@types/node': [ '17.0.16' ],
+266 silly audit   '@types/webidl-conversions': [ '6.1.1' ],
+266 silly audit   '@types/whatwg-url': [ '8.2.1' ],
+266 silly audit   accepts: [ '1.3.8' ],
+266 silly audit   'append-field': [ '1.0.0' ],
+266 silly audit   'array-flatten': [ '1.1.1' ],
+266 silly audit   'base64-js': [ '1.5.1' ],
+266 silly audit   base64id: [ '2.0.0' ],
+266 silly audit   'body-parser': [ '1.19.2', '1.19.1' ],
+266 silly audit   qs: [ '6.9.7', '6.9.6' ],
+266 silly audit   bson: [ '4.6.1' ],
+266 silly audit   buffer: [ '5.7.1' ],
+266 silly audit   'buffer-from': [ '1.1.2' ],
+266 silly audit   busboy: [ '0.3.1', '0.2.14' ],
+266 silly audit   bytes: [ '3.1.2', '3.1.1' ],
+266 silly audit   'component-emitter': [ '1.3.0' ],
+266 silly audit   'concat-stream': [ '1.6.2' ],
+266 silly audit   isarray: [ '1.0.0', '0.0.1' ],
+266 silly audit   'readable-stream': [ '2.3.7', '1.1.14' ],
+266 silly audit   'safe-buffer': [ '5.1.2', '5.2.1' ],
+266 silly audit   string_decoder: [ '1.1.1', '0.10.31' ],
+266 silly audit   'content-disposition': [ '0.5.4' ],
+266 silly audit   'content-type': [ '1.0.4' ],
+266 silly audit   cookie: [ '0.4.1' ],
+266 silly audit   'cookie-signature': [ '1.0.6' ],
+266 silly audit   'core-util-is': [ '1.0.3' ],
+266 silly audit   cors: [ '2.8.5' ],
+266 silly audit   debug: [ '2.6.9', '4.3.3' ],
+266 silly audit   denque: [ '2.0.1' ],
+266 silly audit   depd: [ '1.1.2' ],
+266 silly audit   destroy: [ '1.0.4' ],
+266 silly audit   dicer: [ '0.3.0', '0.2.5' ],
+266 silly audit   dotenv: [ '16.0.0' ],
+266 silly audit   'ee-first': [ '1.1.1' ],
+266 silly audit   encodeurl: [ '1.0.2' ],
+266 silly audit   'engine.io': [ '6.1.3' ],
+266 silly audit   ms: [ '2.1.2', '2.0.0', '2.1.3' ],
+266 silly audit   'engine.io-parser': [ '5.0.3' ],
+266 silly audit   'escape-html': [ '1.0.3' ],
+266 silly audit   etag: [ '1.8.1' ],
+266 silly audit   express: [ '4.17.2' ],
+266 silly audit   'raw-body': [ '2.4.2', '2.4.3' ],
+266 silly audit   'express-fileupload': [ '1.3.1' ],
+266 silly audit   finalhandler: [ '1.1.2' ],
+266 silly audit   forwarded: [ '0.2.0' ],
+266 silly audit   fresh: [ '0.5.2' ],
+266 silly audit   'http-errors': [ '1.8.1' ],
+266 silly audit   'iconv-lite': [ '0.4.24' ],
+266 silly audit   ieee754: [ '1.2.1' ],
+266 silly audit   inherits: [ '2.0.4' ],
+266 silly audit   ip: [ '1.1.5' ],
+266 silly audit   'ipaddr.js': [ '1.9.1' ],
+266 silly audit   'media-typer': [ '0.3.0' ],
+266 silly audit   'memory-pager': [ '1.5.0' ],
+266 silly audit   'merge-descriptors': [ '1.0.1' ],
+266 silly audit   methods: [ '1.1.2' ],
+266 silly audit   mime: [ '1.6.0' ],
+266 silly audit   'mime-db': [ '1.51.0' ],
+266 silly audit   'mime-types': [ '2.1.34' ],
+266 silly audit   minimist: [ '1.2.5' ],
+266 silly audit   mkdirp: [ '0.5.5' ],
+266 silly audit   mongodb: [ '4.3.1' ],
+266 silly audit   'mongodb-connection-string-url': [ '2.4.2' ],
+266 silly audit   multer: [ '1.4.4' ],
+266 silly audit   negotiator: [ '0.6.3' ],
+266 silly audit   'object-assign': [ '4.1.1' ],
+266 silly audit   'on-finished': [ '2.3.0' ],
+266 silly audit   parseurl: [ '1.3.3' ],
+266 silly audit   'path-to-regexp': [ '0.1.7' ],
+266 silly audit   'process-nextick-args': [ '2.0.1' ],
+266 silly audit   'proxy-addr': [ '2.0.7' ],
+266 silly audit   punycode: [ '2.1.1' ],
+266 silly audit   'range-parser': [ '1.2.1' ],
+266 silly audit   'safer-buffer': [ '2.1.2' ],
+266 silly audit   saslprep: [ '1.0.3' ],
+266 silly audit   send: [ '0.17.2' ],
+266 silly audit   'serve-static': [ '1.14.2' ],
+266 silly audit   setprototypeof: [ '1.2.0' ],
+266 silly audit   'smart-buffer': [ '4.2.0' ],
+266 silly audit   'socket.io': [ '4.4.1' ],
+266 silly audit   'socket.io-adapter': [ '2.3.3' ],
+266 silly audit   'socket.io-parser': [ '4.0.4' ],
+266 silly audit   socks: [ '2.6.2' ],
+266 silly audit   'sparse-bitfield': [ '3.0.3' ],
+266 silly audit   statuses: [ '1.5.0' ],
+266 silly audit   streamsearch: [ '0.1.2' ],
+266 silly audit   toidentifier: [ '1.0.1' ],
+266 silly audit   tr46: [ '3.0.0' ],
+266 silly audit   'type-is': [ '1.6.18' ],
+266 silly audit   typedarray: [ '0.0.6' ],
+266 silly audit   unpipe: [ '1.0.0' ],
+266 silly audit   'util-deprecate': [ '1.0.2' ],
+266 silly audit   'utils-merge': [ '1.0.1' ],
+266 silly audit   vary: [ '1.1.2' ],
+266 silly audit   'webidl-conversions': [ '7.0.0' ],
+266 silly audit   'whatwg-url': [ '11.0.0' ],
+266 silly audit   ws: [ '8.2.3' ],
+266 silly audit   xtend: [ '4.0.2' ]
+266 silly audit }
+267 timing reify:unpack Completed in 1ms
+268 timing reify:unretire Completed in 0ms
+269 timing build:queue Completed in 0ms
+270 timing build:deps Completed in 0ms
+271 timing build Completed in 0ms
+272 timing reify:build Completed in 1ms
+273 timing reify:trash Completed in 0ms
+274 timing reify:save Completed in 16ms
+275 http fetch POST 200 https://registry.npmjs.org/-/npm/v1/security/advisories/bulk 129ms
+276 timing auditReport:getReport Completed in 132ms
+277 silly audit report {}
+278 timing auditReport:init Completed in 0ms
+279 timing reify:audit Completed in 133ms
+280 timing reify Completed in 1199ms
+281 timing command:i Completed in 1206ms
+282 notice
+282 notice New [32mpatch[39m version of npm available! [31m8.5.1[39m -> [32m8.5.3[39m
+282 notice Changelog: [36mhttps://github.com/npm/cli/releases/tag/v8.5.3[39m
+282 notice Run [32mnpm install -g npm@8.5.3[39m to update!
+282 notice
+283 verbose exit 0
+284 timing npm Completed in 1457ms
+285 info ok
