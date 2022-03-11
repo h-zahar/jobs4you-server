@@ -1,0 +1,487 @@
+0 verbose cli [
+0 verbose cli   'C:\\Program Files\\nodejs\\node.exe',
+0 verbose cli   'C:\\Users\\nupa_\\AppData\\Roaming\\npm\\node_modules\\npm\\bin\\npm-cli.js',
+0 verbose cli   'i'
+0 verbose cli ]
+1 info using npm@8.5.1
+2 info using node@v16.14.0
+3 timing npm:load:whichnode Completed in 0ms
+4 timing config:load:defaults Completed in 1ms
+5 timing config:load:file:C:\Users\nupa_\AppData\Roaming\npm\node_modules\npm\npmrc Completed in 3ms
+6 timing config:load:builtin Completed in 3ms
+7 timing config:load:cli Completed in 1ms
+8 timing config:load:env Completed in 0ms
+9 timing config:load:file:C:\WebDev_Batch04\End_Game\Final_Team_Project\jobs4you-server\.npmrc Completed in 1ms
+10 timing config:load:project Completed in 4ms
+11 timing config:load:file:C:\Users\nupa_\.npmrc Completed in 0ms
+12 timing config:load:user Completed in 0ms
+13 timing config:load:file:C:\Users\nupa_\AppData\Roaming\npm\etc\npmrc Completed in 0ms
+14 timing config:load:global Completed in 1ms
+15 timing config:load:validate Completed in 0ms
+16 timing config:load:credentials Completed in 1ms
+17 timing config:load:setEnvs Completed in 0ms
+18 timing config:load Completed in 12ms
+19 timing npm:load:configload Completed in 12ms
+20 timing npm:load:setTitle Completed in 1ms
+21 timing config:load:flatten Completed in 2ms
+22 timing npm:load:display Completed in 3ms
+23 verbose logfile C:\WebDev_Batch04\End_Game\Final_Team_Project\jobs4you-server\tmpnodejsnpm-cache\_logs\2022-03-09T20_56_25_626Z-debug-0.log
+24 timing npm:load:logFile Completed in 5ms
+25 timing npm:load:timers Completed in 0ms
+26 timing npm:load:configScope Completed in 0ms
+27 timing npm:load Completed in 21ms
+28 timing arborist:ctor Completed in 0ms
+29 timing idealTree:init Completed in 67ms
+30 timing idealTree:userRequests Completed in 0ms
+31 silly idealTree buildDeps
+32 silly fetch manifest html-pdf@^3.0.1
+33 verbose shrinkwrap failed to load node_modules/.package-lock.json out of date, updated: node_modules
+34 http fetch GET 200 https://registry.npmjs.org/html-pdf 285ms (cache miss)
+35 silly placeDep ROOT html-pdf@3.0.1 OK for: job-search-server@1.0.0 want: ^3.0.1
+36 silly fetch manifest phantomjs-prebuilt@^2.1.16
+37 http fetch GET 200 https://registry.npmjs.org/phantomjs-prebuilt 290ms (cache miss)
+38 timing idealTree:#root Completed in 582ms
+39 silly placeDep ROOT phantomjs-prebuilt@2.1.16 OK for: html-pdf@3.0.1 want: ^2.1.16
+40 silly fetch manifest es6-promise@^4.0.3
+41 silly fetch manifest extract-zip@^1.6.5
+42 silly fetch manifest fs-extra@^1.0.0
+43 silly fetch manifest hasha@^2.2.0
+44 silly fetch manifest kew@^0.7.0
+45 silly fetch manifest progress@^1.1.8
+46 silly fetch manifest request@^2.81.0
+47 silly fetch manifest request-progress@^2.0.1
+48 silly fetch manifest which@^1.2.10
+49 http fetch GET 200 https://registry.npmjs.org/es6-promise 57ms (cache miss)
+50 http fetch GET 200 https://registry.npmjs.org/extract-zip 111ms (cache miss)
+51 http fetch GET 200 https://registry.npmjs.org/kew 113ms (cache miss)
+52 http fetch GET 200 https://registry.npmjs.org/fs-extra 114ms (cache miss)
+53 http fetch GET 200 https://registry.npmjs.org/hasha 117ms (cache miss)
+54 http fetch GET 200 https://registry.npmjs.org/request-progress 118ms (cache miss)
+55 http fetch GET 200 https://registry.npmjs.org/which 120ms (cache miss)
+56 http fetch GET 200 https://registry.npmjs.org/request 122ms (cache miss)
+57 http fetch GET 200 https://registry.npmjs.org/progress 124ms (cache miss)
+58 timing idealTree:node_modules/html-pdf Completed in 127ms
+59 silly placeDep ROOT es6-promise@4.2.8 OK for: phantomjs-prebuilt@2.1.16 want: ^4.0.3
+60 silly placeDep ROOT extract-zip@1.7.0 OK for: phantomjs-prebuilt@2.1.16 want: ^1.6.5
+61 silly placeDep ROOT fs-extra@1.0.0 OK for: phantomjs-prebuilt@2.1.16 want: ^1.0.0
+62 silly placeDep ROOT hasha@2.2.0 OK for: phantomjs-prebuilt@2.1.16 want: ^2.2.0
+63 silly placeDep ROOT kew@0.7.0 OK for: phantomjs-prebuilt@2.1.16 want: ^0.7.0
+64 silly placeDep ROOT progress@1.1.8 OK for: phantomjs-prebuilt@2.1.16 want: ^1.1.8
+65 silly placeDep ROOT request@2.88.2 OK for: phantomjs-prebuilt@2.1.16 want: ^2.81.0
+66 silly placeDep ROOT request-progress@2.0.1 OK for: phantomjs-prebuilt@2.1.16 want: ^2.0.1
+67 silly placeDep ROOT which@1.3.1 OK for: phantomjs-prebuilt@2.1.16 want: ^1.2.10
+68 silly fetch manifest yauzl@^2.10.0
+69 silly fetch manifest graceful-fs@^4.1.2
+70 silly fetch manifest jsonfile@^2.1.0
+71 silly fetch manifest klaw@^1.0.0
+72 silly fetch manifest is-stream@^1.0.1
+73 silly fetch manifest pinkie-promise@^2.0.0
+74 silly fetch manifest aws-sign2@~0.7.0
+75 silly fetch manifest aws4@^1.8.0
+76 silly fetch manifest caseless@~0.12.0
+77 silly fetch manifest combined-stream@~1.0.6
+78 silly fetch manifest extend@~3.0.2
+79 silly fetch manifest forever-agent@~0.6.1
+80 silly fetch manifest form-data@~2.3.2
+81 silly fetch manifest har-validator@~5.1.3
+82 silly fetch manifest http-signature@~1.2.0
+83 silly fetch manifest is-typedarray@~1.0.0
+84 silly fetch manifest isstream@~0.1.2
+85 silly fetch manifest json-stringify-safe@~5.0.1
+86 silly fetch manifest oauth-sign@~0.9.0
+87 silly fetch manifest performance-now@^2.1.0
+88 silly fetch manifest qs@~6.5.2
+89 silly fetch manifest tough-cookie@~2.5.0
+90 silly fetch manifest tunnel-agent@^0.6.0
+91 silly fetch manifest uuid@^3.3.2
+92 silly fetch manifest throttleit@^1.0.0
+93 silly fetch manifest isexe@^2.0.0
+94 http fetch GET 200 https://registry.npmjs.org/qs 29ms (cache hit)
+95 http fetch GET 200 https://registry.npmjs.org/aws4 75ms (cache miss)
+96 http fetch GET 200 https://registry.npmjs.org/jsonfile 77ms (cache miss)
+97 http fetch GET 200 https://registry.npmjs.org/pinkie-promise 79ms (cache miss)
+98 http fetch GET 200 https://registry.npmjs.org/graceful-fs 82ms (cache miss)
+99 http fetch GET 200 https://registry.npmjs.org/aws-sign2 82ms (cache miss)
+100 http fetch GET 200 https://registry.npmjs.org/yauzl 85ms (cache miss)
+101 http fetch GET 200 https://registry.npmjs.org/klaw 88ms (cache miss)
+102 http fetch GET 200 https://registry.npmjs.org/is-stream 89ms (cache miss)
+103 http fetch GET 200 https://registry.npmjs.org/caseless 89ms (cache miss)
+104 http fetch GET 200 https://registry.npmjs.org/extend 98ms (cache miss)
+105 http fetch GET 200 https://registry.npmjs.org/is-typedarray 99ms (cache miss)
+106 http fetch GET 200 https://registry.npmjs.org/json-stringify-safe 110ms (cache miss)
+107 http fetch GET 200 https://registry.npmjs.org/isstream 117ms (cache miss)
+108 http fetch GET 200 https://registry.npmjs.org/performance-now 120ms (cache miss)
+109 http fetch GET 200 https://registry.npmjs.org/http-signature 132ms (cache miss)
+110 http fetch GET 200 https://registry.npmjs.org/forever-agent 136ms (cache miss)
+111 http fetch GET 200 https://registry.npmjs.org/oauth-sign 135ms (cache miss)
+112 http fetch GET 200 https://registry.npmjs.org/tunnel-agent 135ms (cache miss)
+113 http fetch GET 200 https://registry.npmjs.org/tough-cookie 137ms (cache miss)
+114 http fetch GET 200 https://registry.npmjs.org/form-data 143ms (cache miss)
+115 http fetch GET 200 https://registry.npmjs.org/har-validator 144ms (cache miss)
+116 http fetch GET 200 https://registry.npmjs.org/throttleit 140ms (cache miss)
+117 http fetch GET 200 https://registry.npmjs.org/combined-stream 149ms (cache miss)
+118 http fetch GET 200 https://registry.npmjs.org/isexe 142ms (cache miss)
+119 http fetch GET 200 https://registry.npmjs.org/uuid 144ms (cache miss)
+120 timing idealTree:node_modules/phantomjs-prebuilt Completed in 163ms
+121 timing idealTree:node_modules/es6-promise Completed in 0ms
+122 silly placeDep ROOT yauzl@2.10.0 OK for: extract-zip@1.7.0 want: ^2.10.0
+123 silly fetch manifest fd-slicer@~1.1.0
+124 silly fetch manifest buffer-crc32@~0.2.3
+125 http fetch GET 200 https://registry.npmjs.org/buffer-crc32 37ms (cache miss)
+126 http fetch GET 200 https://registry.npmjs.org/fd-slicer 49ms (cache miss)
+127 timing idealTree:node_modules/extract-zip Completed in 53ms
+128 silly placeDep ROOT graceful-fs@4.2.9 OK for: fs-extra@1.0.0 want: ^4.1.2
+129 silly placeDep ROOT jsonfile@2.4.0 OK for: fs-extra@1.0.0 want: ^2.1.0
+130 silly placeDep ROOT klaw@1.3.1 OK for: fs-extra@1.0.0 want: ^1.0.0
+131 timing idealTree:node_modules/fs-extra Completed in 4ms
+132 timing idealTree:node_modules/graceful-fs Completed in 0ms
+133 silly placeDep ROOT is-stream@1.1.0 OK for: hasha@2.2.0 want: ^1.0.1
+134 silly placeDep ROOT pinkie-promise@2.0.1 OK for: hasha@2.2.0 want: ^2.0.0
+135 silly fetch manifest pinkie@^2.0.0
+136 http fetch GET 200 https://registry.npmjs.org/pinkie 41ms (cache miss)
+137 timing idealTree:node_modules/hasha Completed in 44ms
+138 timing idealTree:node_modules/is-stream Completed in 0ms
+139 timing idealTree:node_modules/jsonfile Completed in 0ms
+140 timing idealTree:node_modules/kew Completed in 0ms
+141 timing idealTree:node_modules/klaw Completed in 0ms
+142 silly placeDep ROOT pinkie@2.0.4 OK for: pinkie-promise@2.0.1 want: ^2.0.0
+143 timing idealTree:node_modules/pinkie-promise Completed in 1ms
+144 timing idealTree:node_modules/pinkie Completed in 0ms
+145 timing idealTree:node_modules/progress Completed in 0ms
+146 silly placeDep ROOT aws-sign2@0.7.0 OK for: request@2.88.2 want: ~0.7.0
+147 silly placeDep ROOT aws4@1.11.0 OK for: request@2.88.2 want: ^1.8.0
+148 silly placeDep ROOT caseless@0.12.0 OK for: request@2.88.2 want: ~0.12.0
+149 silly placeDep ROOT combined-stream@1.0.8 OK for: request@2.88.2 want: ~1.0.6
+150 silly placeDep ROOT extend@3.0.2 OK for: request@2.88.2 want: ~3.0.2
+151 silly placeDep ROOT forever-agent@0.6.1 OK for: request@2.88.2 want: ~0.6.1
+152 silly placeDep ROOT form-data@2.3.3 OK for: request@2.88.2 want: ~2.3.2
+153 silly placeDep ROOT har-validator@5.1.5 OK for: request@2.88.2 want: ~5.1.3
+154 silly placeDep ROOT http-signature@1.2.0 OK for: request@2.88.2 want: ~1.2.0
+155 silly placeDep ROOT is-typedarray@1.0.0 OK for: request@2.88.2 want: ~1.0.0
+156 silly placeDep ROOT isstream@0.1.2 OK for: request@2.88.2 want: ~0.1.2
+157 silly placeDep ROOT json-stringify-safe@5.0.1 OK for: request@2.88.2 want: ~5.0.1
+158 silly placeDep ROOT oauth-sign@0.9.0 OK for: request@2.88.2 want: ~0.9.0
+159 silly placeDep ROOT performance-now@2.1.0 OK for: request@2.88.2 want: ^2.1.0
+160 silly placeDep node_modules/request qs@6.5.3 OK for: request@2.88.2 want: ~6.5.2
+161 silly placeDep ROOT tough-cookie@2.5.0 OK for: request@2.88.2 want: ~2.5.0
+162 silly placeDep ROOT tunnel-agent@0.6.0 OK for: request@2.88.2 want: ^0.6.0
+163 silly placeDep ROOT uuid@3.4.0 OK for: request@2.88.2 want: ^3.3.2
+164 silly fetch manifest delayed-stream@~1.0.0
+165 silly fetch manifest asynckit@^0.4.0
+166 silly fetch manifest ajv@^6.12.3
+167 silly fetch manifest har-schema@^2.0.0
+168 silly fetch manifest assert-plus@^1.0.0
+169 silly fetch manifest jsprim@^1.2.2
+170 silly fetch manifest sshpk@^1.7.0
+171 silly fetch manifest psl@^1.1.28
+172 http fetch GET 200 https://registry.npmjs.org/asynckit 49ms (cache miss)
+173 http fetch GET 200 https://registry.npmjs.org/assert-plus 49ms (cache miss)
+174 http fetch GET 200 https://registry.npmjs.org/jsprim 53ms (cache miss)
+175 http fetch GET 200 https://registry.npmjs.org/delayed-stream 57ms (cache miss)
+176 http fetch GET 200 https://registry.npmjs.org/har-schema 64ms (cache miss)
+177 http fetch GET 200 https://registry.npmjs.org/sshpk 64ms (cache miss)
+178 http fetch GET 200 https://registry.npmjs.org/psl 92ms (cache miss)
+179 http fetch GET 200 https://registry.npmjs.org/ajv 97ms (cache miss)
+180 timing idealTree:node_modules/request Completed in 118ms
+181 timing idealTree:node_modules/aws-sign2 Completed in 0ms
+182 timing idealTree:node_modules/aws4 Completed in 0ms
+183 timing idealTree:node_modules/caseless Completed in 0ms
+184 silly placeDep ROOT delayed-stream@1.0.0 OK for: combined-stream@1.0.8 want: ~1.0.0
+185 timing idealTree:node_modules/combined-stream Completed in 1ms
+186 timing idealTree:node_modules/delayed-stream Completed in 0ms
+187 timing idealTree:node_modules/extend Completed in 0ms
+188 timing idealTree:node_modules/forever-agent Completed in 0ms
+189 silly placeDep ROOT asynckit@0.4.0 OK for: form-data@2.3.3 want: ^0.4.0
+190 timing idealTree:node_modules/form-data Completed in 1ms
+191 timing idealTree:node_modules/asynckit Completed in 0ms
+192 silly placeDep ROOT ajv@6.12.6 OK for: har-validator@5.1.5 want: ^6.12.3
+193 silly placeDep ROOT har-schema@2.0.0 OK for: har-validator@5.1.5 want: ^2.0.0
+194 silly fetch manifest fast-deep-equal@^3.1.1
+195 silly fetch manifest fast-json-stable-stringify@^2.0.0
+196 silly fetch manifest json-schema-traverse@^0.4.1
+197 silly fetch manifest uri-js@^4.2.2
+198 http fetch GET 200 https://registry.npmjs.org/fast-deep-equal 44ms (cache miss)
+199 http fetch GET 200 https://registry.npmjs.org/uri-js 51ms (cache miss)
+200 http fetch GET 200 https://registry.npmjs.org/json-schema-traverse 55ms (cache miss)
+201 http fetch GET 200 https://registry.npmjs.org/fast-json-stable-stringify 56ms (cache miss)
+202 timing idealTree:node_modules/har-validator Completed in 58ms
+203 silly placeDep ROOT fast-deep-equal@3.1.3 OK for: ajv@6.12.6 want: ^3.1.1
+204 silly placeDep ROOT fast-json-stable-stringify@2.1.0 OK for: ajv@6.12.6 want: ^2.0.0
+205 silly placeDep ROOT json-schema-traverse@0.4.1 OK for: ajv@6.12.6 want: ^0.4.1
+206 silly placeDep ROOT uri-js@4.4.1 OK for: ajv@6.12.6 want: ^4.2.2
+207 timing idealTree:node_modules/ajv Completed in 4ms
+208 timing idealTree:node_modules/fast-deep-equal Completed in 0ms
+209 timing idealTree:node_modules/fast-json-stable-stringify Completed in 0ms
+210 timing idealTree:node_modules/har-schema Completed in 0ms
+211 silly placeDep ROOT assert-plus@1.0.0 OK for: http-signature@1.2.0 want: ^1.0.0
+212 silly placeDep ROOT jsprim@1.4.2 OK for: http-signature@1.2.0 want: ^1.2.2
+213 silly placeDep ROOT sshpk@1.17.0 OK for: http-signature@1.2.0 want: ^1.7.0
+214 silly fetch manifest extsprintf@1.3.0
+215 silly fetch manifest json-schema@0.4.0
+216 silly fetch manifest verror@1.10.0
+217 silly fetch manifest asn1@~0.2.3
+218 silly fetch manifest dashdash@^1.12.0
+219 silly fetch manifest getpass@^0.1.1
+220 silly fetch manifest jsbn@~0.1.0
+221 silly fetch manifest tweetnacl@~0.14.0
+222 silly fetch manifest ecc-jsbn@~0.1.1
+223 silly fetch manifest bcrypt-pbkdf@^1.0.0
+224 http fetch GET 200 https://registry.npmjs.org/jsbn 49ms (cache miss)
+225 http fetch GET 200 https://registry.npmjs.org/getpass 51ms (cache miss)
+226 http fetch GET 200 https://registry.npmjs.org/ecc-jsbn 51ms (cache miss)
+227 http fetch GET 200 https://registry.npmjs.org/dashdash 54ms (cache miss)
+228 http fetch GET 200 https://registry.npmjs.org/verror 57ms (cache miss)
+229 http fetch GET 200 https://registry.npmjs.org/extsprintf 63ms (cache miss)
+230 http fetch GET 200 https://registry.npmjs.org/asn1 62ms (cache miss)
+231 http fetch GET 200 https://registry.npmjs.org/tweetnacl 115ms (cache miss)
+232 http fetch GET 200 https://registry.npmjs.org/json-schema 118ms (cache miss)
+233 http fetch GET 200 https://registry.npmjs.org/bcrypt-pbkdf 116ms (cache miss)
+234 timing idealTree:node_modules/http-signature Completed in 123ms
+235 timing idealTree:node_modules/assert-plus Completed in 0ms
+236 timing idealTree:node_modules/is-typedarray Completed in 0ms
+237 timing idealTree:node_modules/isstream Completed in 0ms
+238 timing idealTree:node_modules/json-schema-traverse Completed in 0ms
+239 timing idealTree:node_modules/json-stringify-safe Completed in 0ms
+240 silly placeDep ROOT extsprintf@1.3.0 OK for: jsprim@1.4.2 want: 1.3.0
+241 silly placeDep ROOT json-schema@0.4.0 OK for: jsprim@1.4.2 want: 0.4.0
+242 silly placeDep ROOT verror@1.10.0 OK for: jsprim@1.4.2 want: 1.10.0
+243 silly fetch manifest core-util-is@1.0.2
+244 http fetch GET 200 https://registry.npmjs.org/core-util-is 6ms (cache hit)
+245 timing idealTree:node_modules/jsprim Completed in 9ms
+246 timing idealTree:node_modules/extsprintf Completed in 0ms
+247 timing idealTree:node_modules/json-schema Completed in 1ms
+248 timing idealTree:node_modules/oauth-sign Completed in 0ms
+249 timing idealTree:node_modules/performance-now Completed in 0ms
+250 silly placeDep ROOT throttleit@1.0.0 OK for: request-progress@2.0.1 want: ^1.0.0
+251 timing idealTree:node_modules/request-progress Completed in 0ms
+252 silly placeDep ROOT asn1@0.2.6 OK for: sshpk@1.17.0 want: ~0.2.3
+253 silly placeDep ROOT bcrypt-pbkdf@1.0.2 OK for: sshpk@1.17.0 want: ^1.0.0
+254 silly placeDep ROOT dashdash@1.14.1 OK for: sshpk@1.17.0 want: ^1.12.0
+255 silly placeDep ROOT ecc-jsbn@0.1.2 OK for: sshpk@1.17.0 want: ~0.1.1
+256 silly placeDep ROOT getpass@0.1.7 OK for: sshpk@1.17.0 want: ^0.1.1
+257 silly placeDep ROOT jsbn@0.1.1 OK for: sshpk@1.17.0 want: ~0.1.0
+258 silly placeDep ROOT tweetnacl@0.14.5 OK for: sshpk@1.17.0 want: ~0.14.0
+259 timing idealTree:node_modules/sshpk Completed in 6ms
+260 timing idealTree:node_modules/asn1 Completed in 0ms
+261 timing idealTree:node_modules/bcrypt-pbkdf Completed in 0ms
+262 timing idealTree:node_modules/dashdash Completed in 0ms
+263 timing idealTree:node_modules/ecc-jsbn Completed in 0ms
+264 timing idealTree:node_modules/getpass Completed in 0ms
+265 timing idealTree:node_modules/jsbn Completed in 0ms
+266 timing idealTree:node_modules/throttleit Completed in 0ms
+267 silly placeDep ROOT psl@1.8.0 OK for: tough-cookie@2.5.0 want: ^1.1.28
+268 timing idealTree:node_modules/tough-cookie Completed in 1ms
+269 timing idealTree:node_modules/psl Completed in 0ms
+270 timing idealTree:node_modules/tunnel-agent Completed in 0ms
+271 timing idealTree:node_modules/tweetnacl Completed in 0ms
+272 timing idealTree:node_modules/uri-js Completed in 0ms
+273 timing idealTree:node_modules/uuid Completed in 0ms
+274 silly placeDep node_modules/verror core-util-is@1.0.2 OK for: verror@1.10.0 want: 1.0.2
+275 timing idealTree:node_modules/verror Completed in 1ms
+276 silly placeDep ROOT isexe@2.0.0 OK for: which@1.3.1 want: ^2.0.0
+277 timing idealTree:node_modules/which Completed in 1ms
+278 timing idealTree:node_modules/isexe Completed in 0ms
+279 silly placeDep ROOT buffer-crc32@0.2.13 OK for: yauzl@2.10.0 want: ~0.2.3
+280 silly placeDep ROOT fd-slicer@1.1.0 OK for: yauzl@2.10.0 want: ~1.1.0
+281 silly fetch manifest pend@~1.2.0
+282 http fetch GET 200 https://registry.npmjs.org/pend 46ms (cache miss)
+283 timing idealTree:node_modules/yauzl Completed in 49ms
+284 timing idealTree:node_modules/buffer-crc32 Completed in 0ms
+285 silly placeDep ROOT pend@1.2.0 OK for: fd-slicer@1.1.0 want: ~1.2.0
+286 timing idealTree:node_modules/fd-slicer Completed in 1ms
+287 timing idealTree:node_modules/pend Completed in 0ms
+288 timing idealTree:node_modules/request/node_modules/qs Completed in 0ms
+289 timing idealTree:node_modules/verror/node_modules/core-util-is Completed in 0ms
+290 timing idealTree:buildDeps Completed in 1352ms
+291 timing idealTree:fixDepFlags Completed in 2ms
+292 timing idealTree Completed in 1423ms
+293 timing reify:loadTrees Completed in 1423ms
+294 timing reify:diffTrees Completed in 5ms
+295 silly reify moves {}
+296 timing reify:retireShallow Completed in 0ms
+297 timing reify:createSparse Completed in 0ms
+298 timing reify:loadBundles Completed in 0ms
+299 silly audit bulk request {
+299 silly audit   '@socket.io/base64-arraybuffer': [ '1.0.2' ],
+299 silly audit   '@types/component-emitter': [ '1.2.11' ],
+299 silly audit   '@types/cookie': [ '0.4.1' ],
+299 silly audit   '@types/cors': [ '2.8.12' ],
+299 silly audit   '@types/node': [ '17.0.16' ],
+299 silly audit   '@types/webidl-conversions': [ '6.1.1' ],
+299 silly audit   '@types/whatwg-url': [ '8.2.1' ],
+299 silly audit   accepts: [ '1.3.8' ],
+299 silly audit   'append-field': [ '1.0.0' ],
+299 silly audit   'array-flatten': [ '1.1.1' ],
+299 silly audit   'base64-js': [ '1.5.1' ],
+299 silly audit   base64id: [ '2.0.0' ],
+299 silly audit   'body-parser': [ '1.19.2', '1.19.1' ],
+299 silly audit   qs: [ '6.9.7', '6.9.6', '6.5.3' ],
+299 silly audit   bson: [ '4.6.1' ],
+299 silly audit   buffer: [ '5.7.1' ],
+299 silly audit   'buffer-from': [ '1.1.2' ],
+299 silly audit   busboy: [ '0.3.1', '0.2.14' ],
+299 silly audit   bytes: [ '3.1.2', '3.1.1' ],
+299 silly audit   'component-emitter': [ '1.3.0' ],
+299 silly audit   'concat-stream': [ '1.6.2' ],
+299 silly audit   isarray: [ '1.0.0', '0.0.1' ],
+299 silly audit   'readable-stream': [ '2.3.7', '1.1.14' ],
+299 silly audit   'safe-buffer': [ '5.1.2', '5.2.1' ],
+299 silly audit   string_decoder: [ '1.1.1', '0.10.31' ],
+299 silly audit   'content-disposition': [ '0.5.4' ],
+299 silly audit   'content-type': [ '1.0.4' ],
+299 silly audit   cookie: [ '0.4.1' ],
+299 silly audit   'cookie-signature': [ '1.0.6' ],
+299 silly audit   'core-util-is': [ '1.0.3', '1.0.2' ],
+299 silly audit   cors: [ '2.8.5' ],
+299 silly audit   debug: [ '2.6.9', '4.3.3' ],
+299 silly audit   denque: [ '2.0.1' ],
+299 silly audit   depd: [ '1.1.2' ],
+299 silly audit   destroy: [ '1.0.4' ],
+299 silly audit   dicer: [ '0.3.0', '0.2.5' ],
+299 silly audit   dotenv: [ '16.0.0' ],
+299 silly audit   'ee-first': [ '1.1.1' ],
+299 silly audit   encodeurl: [ '1.0.2' ],
+299 silly audit   'engine.io': [ '6.1.3' ],
+299 silly audit   'engine.io-parser': [ '5.0.3' ],
+299 silly audit   ms: [ '2.1.2', '2.0.0', '2.1.3' ],
+299 silly audit   'escape-html': [ '1.0.3' ],
+299 silly audit   etag: [ '1.8.1' ],
+299 silly audit   express: [ '4.17.2' ],
+299 silly audit   'express-fileupload': [ '1.3.1' ],
+299 silly audit   'raw-body': [ '2.4.2', '2.4.3' ],
+299 silly audit   finalhandler: [ '1.1.2' ],
+299 silly audit   forwarded: [ '0.2.0' ],
+299 silly audit   fresh: [ '0.5.2' ],
+299 silly audit   'http-errors': [ '1.8.1' ],
+299 silly audit   'iconv-lite': [ '0.4.24' ],
+299 silly audit   ieee754: [ '1.2.1' ],
+299 silly audit   inherits: [ '2.0.4' ],
+299 silly audit   ip: [ '1.1.5' ],
+299 silly audit   'ipaddr.js': [ '1.9.1' ],
+299 silly audit   'media-typer': [ '0.3.0' ],
+299 silly audit   'memory-pager': [ '1.5.0' ],
+299 silly audit   'merge-descriptors': [ '1.0.1' ],
+299 silly audit   methods: [ '1.1.2' ],
+299 silly audit   mime: [ '1.6.0' ],
+299 silly audit   'mime-db': [ '1.51.0' ],
+299 silly audit   'mime-types': [ '2.1.34' ],
+299 silly audit   minimist: [ '1.2.5' ],
+299 silly audit   mkdirp: [ '0.5.5' ],
+299 silly audit   mongodb: [ '4.3.1' ],
+299 silly audit   'mongodb-connection-string-url': [ '2.4.2' ],
+299 silly audit   multer: [ '1.4.4' ],
+299 silly audit   negotiator: [ '0.6.3' ],
+299 silly audit   'object-assign': [ '4.1.1' ],
+299 silly audit   'on-finished': [ '2.3.0' ],
+299 silly audit   parseurl: [ '1.3.3' ],
+299 silly audit   'path-to-regexp': [ '0.1.7' ],
+299 silly audit   'process-nextick-args': [ '2.0.1' ],
+299 silly audit   'proxy-addr': [ '2.0.7' ],
+299 silly audit   punycode: [ '2.1.1' ],
+299 silly audit   'range-parser': [ '1.2.1' ],
+299 silly audit   'safer-buffer': [ '2.1.2' ],
+299 silly audit   saslprep: [ '1.0.3' ],
+299 silly audit   send: [ '0.17.2' ],
+299 silly audit   'serve-static': [ '1.14.2' ],
+299 silly audit   setprototypeof: [ '1.2.0' ],
+299 silly audit   'smart-buffer': [ '4.2.0' ],
+299 silly audit   'socket.io': [ '4.4.1' ],
+299 silly audit   'socket.io-adapter': [ '2.3.3' ],
+299 silly audit   'socket.io-parser': [ '4.0.4' ],
+299 silly audit   socks: [ '2.6.2' ],
+299 silly audit   'sparse-bitfield': [ '3.0.3' ],
+299 silly audit   statuses: [ '1.5.0' ],
+299 silly audit   streamsearch: [ '0.1.2' ],
+299 silly audit   toidentifier: [ '1.0.1' ],
+299 silly audit   tr46: [ '3.0.0' ],
+299 silly audit   'type-is': [ '1.6.18' ],
+299 silly audit   typedarray: [ '0.0.6' ],
+299 silly audit   unpipe: [ '1.0.0' ],
+299 silly audit   'util-deprecate': [ '1.0.2' ],
+299 silly audit   'utils-merge': [ '1.0.1' ],
+299 silly audit   vary: [ '1.1.2' ],
+299 silly audit   'webidl-conversions': [ '7.0.0' ],
+299 silly audit   'whatwg-url': [ '11.0.0' ],
+299 silly audit   ws: [ '8.2.3' ],
+299 silly audit   xtend: [ '4.0.2' ],
+299 silly audit   'html-pdf': [ '3.0.1' ],
+299 silly audit   'phantomjs-prebuilt': [ '2.1.16' ],
+299 silly audit   'es6-promise': [ '4.2.8' ],
+299 silly audit   'extract-zip': [ '1.7.0' ],
+299 silly audit   'fs-extra': [ '1.0.0' ],
+299 silly audit   hasha: [ '2.2.0' ],
+299 silly audit   kew: [ '0.7.0' ],
+299 silly audit   progress: [ '1.1.8' ],
+299 silly audit   request: [ '2.88.2' ],
+299 silly audit   'request-progress': [ '2.0.1' ],
+299 silly audit   which: [ '1.3.1' ],
+299 silly audit   yauzl: [ '2.10.0' ],
+299 silly audit   'graceful-fs': [ '4.2.9' ],
+299 silly audit   jsonfile: [ '2.4.0' ],
+299 silly audit   klaw: [ '1.3.1' ],
+299 silly audit   'is-stream': [ '1.1.0' ],
+299 silly audit   'pinkie-promise': [ '2.0.1' ],
+299 silly audit   pinkie: [ '2.0.4' ],
+299 silly audit   'aws-sign2': [ '0.7.0' ],
+299 silly audit   aws4: [ '1.11.0' ],
+299 silly audit   caseless: [ '0.12.0' ],
+299 silly audit   'combined-stream': [ '1.0.8' ],
+299 silly audit   extend: [ '3.0.2' ],
+299 silly audit   'forever-agent': [ '0.6.1' ],
+299 silly audit   'form-data': [ '2.3.3' ],
+299 silly audit   'har-validator': [ '5.1.5' ],
+299 silly audit   'http-signature': [ '1.2.0' ],
+299 silly audit   'is-typedarray': [ '1.0.0' ],
+299 silly audit   isstream: [ '0.1.2' ],
+299 silly audit   'json-stringify-safe': [ '5.0.1' ],
+299 silly audit   'oauth-sign': [ '0.9.0' ],
+299 silly audit   'performance-now': [ '2.1.0' ],
+299 silly audit   'tough-cookie': [ '2.5.0' ],
+299 silly audit   'tunnel-agent': [ '0.6.0' ],
+299 silly audit   uuid: [ '3.4.0' ],
+299 silly audit   'delayed-stream': [ '1.0.0' ],
+299 silly audit   asynckit: [ '0.4.0' ],
+299 silly audit   ajv: [ '6.12.6' ],
+299 silly audit   'har-schema': [ '2.0.0' ],
+299 silly audit   'fast-deep-equal': [ '3.1.3' ],
+299 silly audit   'fast-json-stable-stringify': [ '2.1.0' ],
+299 silly audit   'json-schema-traverse': [ '0.4.1' ],
+299 silly audit   'uri-js': [ '4.4.1' ],
+299 silly audit   'assert-plus': [ '1.0.0' ],
+299 silly audit   jsprim: [ '1.4.2' ],
+299 silly audit   sshpk: [ '1.17.0' ],
+299 silly audit   extsprintf: [ '1.3.0' ],
+299 silly audit   'json-schema': [ '0.4.0' ],
+299 silly audit   verror: [ '1.10.0' ],
+299 silly audit   throttleit: [ '1.0.0' ],
+299 silly audit   asn1: [ '0.2.6' ],
+299 silly audit   'bcrypt-pbkdf': [ '1.0.2' ],
+299 silly audit   dashdash: [ '1.14.1' ],
+299 silly audit   'ecc-jsbn': [ '0.1.2' ],
+299 silly audit   getpass: [ '0.1.7' ],
+299 silly audit   jsbn: [ '0.1.1' ],
+299 silly audit   tweetnacl: [ '0.14.5' ],
+299 silly audit   psl: [ '1.8.0' ],
+299 silly audit   isexe: [ '2.0.0' ],
+299 silly audit   'buffer-crc32': [ '0.2.13' ],
+299 silly audit   'fd-slicer': [ '1.1.0' ],
+299 silly audit   pend: [ '1.2.0' ]
+299 silly audit }
+300 timing reify:unpack Completed in 0ms
+301 timing reify:unretire Completed in 0ms
+302 timing build:queue Completed in 0ms
+303 timing build:deps Completed in 0ms
+304 timing build Completed in 0ms
+305 timing reify:build Completed in 0ms
+306 timing reify:trash Completed in 1ms
+307 timing reify:save Completed in 21ms
+308 http fetch POST 200 https://registry.npmjs.org/-/npm/v1/security/advisories/bulk 136ms
+309 timing auditReport:getReport Completed in 138ms
+310 silly audit report {}
+311 timing auditReport:init Completed in 0ms
+312 timing reify:audit Completed in 139ms
+313 timing reify Completed in 1576ms
+314 timing command:i Completed in 1583ms
+315 verbose exit 0
+316 timing npm Completed in 1834ms
+317 info ok
