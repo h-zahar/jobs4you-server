@@ -435,7 +435,7 @@ res.sendFile(`${__dirname}/result.pdf`)
 app.post('/addProfile', async(req,res)=>{
   const profileInfo=req.body
   let insertedProfile;
- if(profileInfo.industy===undefined){
+ if(profileInfo.pEmail){
    insertedProfile= await candidatesCollection.insertOne(profileInfo)
  }else{
   insertedProfile= await employersCollection.insertOne(profileInfo)
@@ -454,6 +454,24 @@ const id = req.params.id;
 const query = { _id: objectId(id) };
 console.log(query)
 const candidate = await candidatesCollection.findOne(query);
+res.json(candidate);
+})
+//   get single candidate by email
+app.get('/individualCandidate/:email', async (req, res) => {
+const queryEmail= req.params.email;
+console.log(queryEmail)
+const query = {pEmail:queryEmail};
+console.log(query)
+const candidate = await candidatesCollection.findOne(query);
+res.json(candidate);
+})
+//   get single companyProfile by email
+app.get('/individualCompany/:email', async (req, res) => {
+const queryEmail= req.params.email;
+console.log(queryEmail)
+const query = {email:queryEmail};
+console.log(query)
+const candidate = await employersCollection.findOne(query);
 res.json(candidate);
 })
 
