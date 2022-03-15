@@ -14,6 +14,8 @@ const {
   getUsersInRoom,
   getRemainedUsersInRoom,
 } = require("./users");
+const pdf=require('html-pdf');
+const pdfTemplate=require('./PdfCreate')
 // const multer = require("multer")
 
 const objectId = require("mongodb").ObjectId;
@@ -706,7 +708,7 @@ async function run() {
     });
     // create pdf ( Raju )
     app.post("/createPdf", (req, res) => {
-      console.log(req.body);
+      console.log('server hit',req.body);
       pdf.create(pdfTemplate(req.body), {}).toFile("result.pdf", (err) => {
         if (err) {
           res.send(Promise.reject());
@@ -738,6 +740,11 @@ async function run() {
     app.get("/allprofiles", async (req, res) => {
       const allCandidates = await candidatesCollection.find({}).toArray();
       res.json(allCandidates);
+    });
+    // All companies
+    app.get("/companyprofiles", async (req, res) => {
+      const allCompanies = await employersCollection.find({}).toArray();
+      res.json(allCompanies);
     });
     //   get single profile
     app.get("/profile/:id", async (req, res) => {
@@ -775,9 +782,33 @@ async function run() {
           pEmail: req.body.pEmail,
           pContact: req.body.pContact,
           lname: req.body.lname,
+          address: req.body.address,
+          eContact: req.body.eContact,
+        
         },
       };
       const updateResult = await candidatesCollection.updateOne(
+        filter,
+        updateStatus
+      );
+      console.log(updateResult);
+      res.json(updateResult);
+    });
+    // Edit Company profile
+    app.put("/singleCompany/:id", async (req, res) => {
+      const filter = { _id: objectId(req.params.id) };
+      console.log(filter);
+      const updateStatus = {
+        $set: {
+          cname: req.body.cname,
+          contact: req.body.contact,
+          industry: req.body.industry,
+          founded: req.body.founded,
+          country: req.body.country,
+        
+        },
+      };
+      const updateResult = await employersCollection.updateOne(
         filter,
         updateStatus
       );
