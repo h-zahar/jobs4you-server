@@ -313,24 +313,24 @@ async function run() {
       res.json({ admin: isAdmin });
     });
 
-    //admin role get api
-    app.get('/users/:email', async (req, res) => {
-      const email = req.params.email;
-      const query = { email: email };
-      const user = await userCollection.findOne(query);
-      let isAdmin = 'user';
-      if (user?.role === 'admin') {
-        isAdmin = 'admin';
-      }
-      else if (user?.role === 'seeker') {
-        isAdmin = 'seeker';
-      }
-      else if (user?.role === 'company') {
-        isAdmin = 'company';
-      }
+    // //admin role get api
+    // app.get('/users/:email', async (req, res) => {
+    //   const email = req.params.email;
+    //   const query = { email: email };
+    //   const user = await userCollection.findOne(query);
+    //   let isAdmin = 'user';
+    //   if (user?.role === 'admin') {
+    //     isAdmin = 'admin';
+    //   }
+    //   else if (user?.role === 'seeker') {
+    //     isAdmin = 'seeker';
+    //   }
+    //   else if (user?.role === 'company') {
+    //     isAdmin = 'company';
+    //   }
 
-      res.json({ admin: isAdmin });
-    })
+    //   res.json({ admin: isAdmin });
+    // })
 
     //get all review
     app.get("/reviews", async (req, res) => {
