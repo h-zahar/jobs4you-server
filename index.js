@@ -278,6 +278,17 @@ async function run() {
         res.json(result);
       });
     });
+    // Delete resume
+    app.delete('/resume/:id', async (req, res) => {
+      const id = req.params.id;
+      console.log(id)
+      const query = { _id: objectId(id) };
+      const result = await resumeCollection.deleteOne(query);
+
+      console.log('deleting resume with id ', result);
+
+      res.json(result);
+  })
 
     // End Sadia Code //
 
