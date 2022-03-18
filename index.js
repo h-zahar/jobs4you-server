@@ -257,27 +257,24 @@ async function run() {
       res.send(result);
       console.log(resumeUpload);
 
-      // Update Resume API
+      
+});
+app.put("/updateInfo/:id", async (req, res) => {
+  const id = req.params.id;
+  const updatedInfo = req.body;
+  const filter = { _id: objectId(id) };
+  const options = { upsert: true };
+  const updateDoc = {
+      $set: {
 
-      app.put("/updateInfo/:id", async (req, res) => {
-        const id = req.params.id;
-        const updatedInfo = req.body;
-        const filter = { _id: objectId(id) };
-        const options = { upsert: true };
-        const updateDoc = {
-          $set: {
-            resume: updatedInfo.resume,
-          },
-        };
-        const result = await resumeCollection.updateOne(
-          filter,
-          updateDoc,
-          options
-        );
-        console.log("updating", updatedInfo);
-        res.json(result);
-      });
-    });
+        resumepdfFile: updatedInfo.resumepdfFile,
+          
+      },
+  };
+  const result = await resumeCollection.updateOne(filter, updateDoc, options)
+  console.log('updating', updatedInfo)
+  res.json(result)
+});
     // Delete resume
     app.delete('/resume/:id', async (req, res) => {
       const id = req.params.id;
