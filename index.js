@@ -257,24 +257,24 @@ async function run() {
       res.send(result);
       console.log(resumeUpload);
 
-      
-});
-app.put("/updateInfo/:id", async (req, res) => {
-  const id = req.params.id;
-  const updatedInfo = req.body;
-  const filter = { _id: objectId(id) };
-  const options = { upsert: true };
-  const updateDoc = {
-      $set: {
 
-        resumepdfFile: updatedInfo.resumepdfFile,
-          
-      },
-  };
-  const result = await resumeCollection.updateOne(filter, updateDoc, options)
-  console.log('updating', updatedInfo)
-  res.json(result)
-});
+    });
+    app.put("/updateInfo/:id", async (req, res) => {
+      const id = req.params.id;
+      const updatedInfo = req.body;
+      const filter = { _id: objectId(id) };
+      const options = { upsert: true };
+      const updateDoc = {
+        $set: {
+
+          resumepdfFile: updatedInfo.resumepdfFile,
+
+        },
+      };
+      const result = await resumeCollection.updateOne(filter, updateDoc, options)
+      console.log('updating', updatedInfo)
+      res.json(result)
+    });
     // Delete resume
     app.delete('/resume/:id', async (req, res) => {
       const id = req.params.id;
@@ -367,7 +367,7 @@ app.put("/updateInfo/:id", async (req, res) => {
     //google sign in user update/put function
     app.put("/users", async (req, res) => {
       const user = req.body;
-      // user.role = 'seeker';
+      user.role = 'seeker';
       console.log("this is google user", user);
       const filter = { email: user.email };
       const options = { upsert: true };
