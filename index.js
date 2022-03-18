@@ -14,8 +14,8 @@ const {
   getUsersInRoom,
   getRemainedUsersInRoom,
 } = require("./users");
-const pdf=require('html-pdf');
-const pdfTemplate=require('./PdfCreate')
+const pdf = require("html-pdf");
+const pdfTemplate = require("./PdfCreate");
 // const multer = require("multer")
 
 const objectId = require("mongodb").ObjectId;
@@ -290,11 +290,11 @@ async function run() {
       console.log(result);
       res.json(result);
     });
-    app.get('/users', async (req, res) => {
+    app.get("/users", async (req, res) => {
       const cursor = userCollection.find({});
       const user = await cursor.toArray();
-      res.send(user)
-    })
+      res.send(user);
+    });
     //admin role get api
     app.get("/users/:email", async (req, res) => {
       const email = req.params.email;
@@ -313,23 +313,21 @@ async function run() {
     });
 
     //admin role get api
-    app.get('/users/:email', async (req, res) => {
+    app.get("/users/:email", async (req, res) => {
       const email = req.params.email;
       const query = { email: email };
       const user = await userCollection.findOne(query);
-      let isAdmin = 'user';
-      if (user?.role === 'admin') {
-        isAdmin = 'admin';
-      }
-      else if (user?.role === 'seeker') {
-        isAdmin = 'seeker';
-      }
-      else if (user?.role === 'company') {
-        isAdmin = 'company';
+      let isAdmin = "user";
+      if (user?.role === "admin") {
+        isAdmin = "admin";
+      } else if (user?.role === "seeker") {
+        isAdmin = "seeker";
+      } else if (user?.role === "company") {
+        isAdmin = "company";
       }
 
       res.json({ admin: isAdmin });
-    })
+    });
 
     //get all review
     app.get("/reviews", async (req, res) => {
@@ -355,7 +353,7 @@ async function run() {
     app.put("/users", async (req, res) => {
       const user = req.body;
       // user.role = 'seeker';
-      console.log('this is google user', user);
+      console.log("this is google user", user);
       const filter = { email: user.email };
       const options = { upsert: true };
       const updateDoc = { $set: user };
@@ -370,6 +368,7 @@ async function run() {
       const result = await userCollection.updateOne(filter, updateDoc);
       res.json(result);
     });
+
     // Nuzhat's Server
 
     // Post a Job
@@ -408,7 +407,7 @@ async function run() {
     // Server - Rifat
 
     // Skill Add
-    app.get('/posted-skills/:id', async (req, res) => {
+    app.get("/posted-skills/:id", async (req, res) => {
       const id = req.params.id;
       const query = { _id: objectId(id) };
       const result = await jobs.findOne(query);
@@ -419,10 +418,9 @@ async function run() {
       if (skills) {
         res.json(skills);
       }
-
     });
 
-    app.get('/skills/:email', async (req, res) => {
+    app.get("/skills/:email", async (req, res) => {
       const email = req.params.email;
       const query = { email: email };
       const result = await skills.findOne(query);
@@ -430,7 +428,6 @@ async function run() {
       if (result?.skills) {
         res.json(result.skills);
       }
-
     });
 
     app.put("/skills", async (req, res) => {
@@ -439,7 +436,7 @@ async function run() {
       const options = { upsert: true };
 
       const upsertedDoc = {
-        $set: upsertDoc
+        $set: upsertDoc,
       };
 
       const result = await skills.updateOne(filter, upsertedDoc, options);
@@ -708,7 +705,7 @@ async function run() {
     });
     // create pdf ( Raju )
     app.post("/createPdf", (req, res) => {
-      console.log('server hit',req.body);
+      console.log("server hit", req.body);
       pdf.create(pdfTemplate(req.body), {}).toFile("result.pdf", (err) => {
         if (err) {
           res.send(Promise.reject());
@@ -726,16 +723,16 @@ async function run() {
     });
 
     // Job-seekers && recruiter's profile
-    app.post('/addProfile', async(req,res)=>{
-      const profileInfo=req.body
+    app.post("/addProfile", async (req, res) => {
+      const profileInfo = req.body;
       let insertedProfile;
-     if(profileInfo.pEmail){
-       insertedProfile= await candidatesCollection.insertOne(profileInfo)
-     }else{
-      insertedProfile= await employersCollection.insertOne(profileInfo)
-     }
-      res.json(insertedProfile)
-    })
+      if (profileInfo.pEmail) {
+        insertedProfile = await candidatesCollection.insertOne(profileInfo);
+      } else {
+        insertedProfile = await employersCollection.insertOne(profileInfo);
+      }
+      res.json(insertedProfile);
+    });
     // All profile
     app.get("/allprofiles", async (req, res) => {
       const allCandidates = await candidatesCollection.find({}).toArray();
@@ -755,23 +752,23 @@ async function run() {
       const candidate = await candidatesCollection.findOne(query);
       res.json(candidate);
     });
-    app.get('/individualCandidate/:email', async (req, res) => {
-      const queryEmail= req.params.email;
-      console.log(queryEmail)
-      const query = {pEmail:queryEmail};
-      console.log(query)
+    app.get("/individualCandidate/:email", async (req, res) => {
+      const queryEmail = req.params.email;
+      console.log(queryEmail);
+      const query = { pEmail: queryEmail };
+      console.log(query);
       const candidate = await candidatesCollection.findOne(query);
       res.json(candidate);
-      })
-      //   get single companyProfile by email
-      app.get('/individualCompany/:email', async (req, res) => {
-      const queryEmail= req.params.email;
-      console.log(queryEmail)
-      const query = {email:queryEmail};
-      console.log(query)
+    });
+    //   get single companyProfile by email
+    app.get("/individualCompany/:email", async (req, res) => {
+      const queryEmail = req.params.email;
+      console.log(queryEmail);
+      const query = { email: queryEmail };
+      console.log(query);
       const candidate = await employersCollection.findOne(query);
       res.json(candidate);
-      })
+    });
     // Edit profile
     app.put("/singleProfile/:id", async (req, res) => {
       const filter = { _id: objectId(req.params.id) };
@@ -784,7 +781,6 @@ async function run() {
           lname: req.body.lname,
           address: req.body.address,
           eContact: req.body.eContact,
-        
         },
       };
       const updateResult = await candidatesCollection.updateOne(
@@ -805,7 +801,6 @@ async function run() {
           industry: req.body.industry,
           founded: req.body.founded,
           country: req.body.country,
-        
         },
       };
       const updateResult = await employersCollection.updateOne(
