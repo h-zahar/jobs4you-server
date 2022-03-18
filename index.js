@@ -14,6 +14,8 @@ const {
   getUsersInRoom,
   getRemainedUsersInRoom,
 } = require("./users");
+const pdf = require("html-pdf");
+const pdfTemplate = require("./PdfCreate");
 // const multer = require("multer")
 
 const objectId = require("mongodb").ObjectId;
@@ -33,6 +35,7 @@ app.use(fileUpload());
 // })
 
 // const uploadStorage = multer({ storage: storage })
+/// Git trying
 const port = process.env.PORT || 5000;
 
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.11xcw.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
@@ -177,6 +180,11 @@ async function run() {
       res.json(apply);
     });
     app.post("/applyList", async (req, res) => {
+      const job = req.body.job;
+      const company = req.body.company;
+      const jobLocation = req.body.jobLocation;
+      const employmentStatus = req.body.employmentStatus;
+      const image = req.body.image;
       const firstName = req.body.firstName;
       const lastName = req.body.lastName;
       const dob = req.body.dob;
@@ -195,6 +203,11 @@ async function run() {
       const coverLetterPdfBuffer = Buffer.from(encodedcoverletterPdf, "base64");
 
       const apply = {
+        job,
+        company,
+        jobLocation,
+        employmentStatus,
+        image,
         firstName,
         lastName,
         dob,
@@ -265,6 +278,17 @@ async function run() {
         res.json(result);
       });
     });
+    // Delete resume
+    app.delete('/resume/:id', async (req, res) => {
+      const id = req.params.id;
+      console.log(id)
+      const query = { _id: objectId(id) };
+      const result = await resumeCollection.deleteOne(query);
+
+      console.log('deleting resume with id ', result);
+
+      res.json(result);
+  })
 
     // End Sadia Code //
 
@@ -278,11 +302,11 @@ async function run() {
       console.log(result);
       res.json(result);
     });
-    app.get('/users', async (req, res) => {
+    app.get("/users", async (req, res) => {
       const cursor = userCollection.find({});
       const user = await cursor.toArray();
-      res.send(user)
-    })
+      res.send(user);
+    });
     //admin role get api
     app.get("/users/:email", async (req, res) => {
       const email = req.params.email;
@@ -299,6 +323,25 @@ async function run() {
       console.log(isAdmin);
       res.json({ admin: isAdmin });
     });
+
+    // //admin role get api
+    // app.get('/users/:email', async (req, res) => {
+    //   const email = req.params.email;
+    //   const query = { email: email };
+    //   const user = await userCollection.findOne(query);
+    //   let isAdmin = 'user';
+    //   if (user?.role === 'admin') {
+    //     isAdmin = 'admin';
+    //   }
+    //   else if (user?.role === 'seeker') {
+    //     isAdmin = 'seeker';
+    //   }
+    //   else if (user?.role === 'company') {
+    //     isAdmin = 'company';
+    //   }
+
+    //   res.json({ admin: isAdmin });
+    // })
 
     //get all review
     app.get("/reviews", async (req, res) => {
@@ -324,7 +367,7 @@ async function run() {
     app.put("/users", async (req, res) => {
       const user = req.body;
       // user.role = 'seeker';
-      console.log('this is google user', user);
+      console.log("this is google user", user);
       const filter = { email: user.email };
       const options = { upsert: true };
       const updateDoc = { $set: user };
@@ -339,6 +382,7 @@ async function run() {
       const result = await userCollection.updateOne(filter, updateDoc);
       res.json(result);
     });
+
     // Nuzhat's Server
 
     // Post a Job
@@ -374,12 +418,46 @@ async function run() {
       res.json(result);
     });
 
-    // Skill Add
-    app.post("/skills", async (req, res) => {
-      const insertDoc = req.body;
+    // Server - Rifat
 
-      const result = await skills.insertOne(insertDoc);
-      res.json(result);
+    // Skill Add
+    app.get("/posted-skills/:id", async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: objectId(id) };
+      const result = await jobs.findOne(query);
+      // console.log(result)
+
+      const { skills } = result;
+
+      if (skills) {
+        res.json(skills);
+      }
+    });
+
+    app.get("/skills/:email", async (req, res) => {
+      const email = req.params.email;
+      const query = { email: email };
+      const result = await skills.findOne(query);
+
+      if (result?.skills) {
+        res.json(result.skills);
+      }
+    });
+
+    app.put("/skills", async (req, res) => {
+      const upsertDoc = req.body;
+      const filter = { email: upsertDoc?.email };
+      const options = { upsert: true };
+
+      const upsertedDoc = {
+        $set: upsertDoc,
+      };
+
+      const result = await skills.updateOne(filter, upsertedDoc, options);
+
+      if (result?.acknowledged) {
+        res.json(result);
+      }
     });
 
     // Company Collection
@@ -460,6 +538,7 @@ async function run() {
     app.put("/faqDislike/:email", async (req, res) => {
       const email = req.params.email;
       const updated = req.body;
+      console.log(email, updated);
 
       const filter = { _id: objectId(updated?._id) };
 
@@ -640,7 +719,7 @@ async function run() {
     });
     // create pdf ( Raju )
     app.post("/createPdf", (req, res) => {
-      console.log(req.body);
+      console.log("server hit", req.body);
       pdf.create(pdfTemplate(req.body), {}).toFile("result.pdf", (err) => {
         if (err) {
           res.send(Promise.reject());
@@ -660,9 +739,8 @@ async function run() {
     // Job-seekers && recruiter's profile
     app.post("/addProfile", async (req, res) => {
       const profileInfo = req.body;
-      console.log(profileInfo, "hit the api");
       let insertedProfile;
-      if (profileInfo.role.toLowerCase() == "candidate") {
+      if (profileInfo.pEmail) {
         insertedProfile = await candidatesCollection.insertOne(profileInfo);
       } else {
         insertedProfile = await employersCollection.insertOne(profileInfo);
@@ -674,6 +752,11 @@ async function run() {
       const allCandidates = await candidatesCollection.find({}).toArray();
       res.json(allCandidates);
     });
+    // All companies
+    app.get("/companyprofiles", async (req, res) => {
+      const allCompanies = await employersCollection.find({}).toArray();
+      res.json(allCompanies);
+    });
     //   get single profile
     app.get("/profile/:id", async (req, res) => {
       const id = req.params.id;
@@ -683,7 +766,23 @@ async function run() {
       const candidate = await candidatesCollection.findOne(query);
       res.json(candidate);
     });
-
+    app.get("/individualCandidate/:email", async (req, res) => {
+      const queryEmail = req.params.email;
+      console.log(queryEmail);
+      const query = { pEmail: queryEmail };
+      console.log(query);
+      const candidate = await candidatesCollection.findOne(query);
+      res.json(candidate);
+    });
+    //   get single companyProfile by email
+    app.get("/individualCompany/:email", async (req, res) => {
+      const queryEmail = req.params.email;
+      console.log(queryEmail);
+      const query = { email: queryEmail };
+      console.log(query);
+      const candidate = await employersCollection.findOne(query);
+      res.json(candidate);
+    });
     // Edit profile
     app.put("/singleProfile/:id", async (req, res) => {
       const filter = { _id: objectId(req.params.id) };
@@ -694,9 +793,31 @@ async function run() {
           pEmail: req.body.pEmail,
           pContact: req.body.pContact,
           lname: req.body.lname,
+          address: req.body.address,
+          eContact: req.body.eContact,
         },
       };
       const updateResult = await candidatesCollection.updateOne(
+        filter,
+        updateStatus
+      );
+      console.log(updateResult);
+      res.json(updateResult);
+    });
+    // Edit Company profile
+    app.put("/singleCompany/:id", async (req, res) => {
+      const filter = { _id: objectId(req.params.id) };
+      console.log(filter);
+      const updateStatus = {
+        $set: {
+          cname: req.body.cname,
+          contact: req.body.contact,
+          industry: req.body.industry,
+          founded: req.body.founded,
+          country: req.body.country,
+        },
+      };
+      const updateResult = await employersCollection.updateOne(
         filter,
         updateStatus
       );
