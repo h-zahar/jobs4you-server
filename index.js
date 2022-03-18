@@ -288,7 +288,7 @@ async function run() {
       console.log('deleting resume with id ', result);
 
       res.json(result);
-  })
+    })
 
     // End Sadia Code //
 
@@ -312,13 +312,17 @@ async function run() {
       const email = req.params.email;
       const query = { email: email };
       const user = await userCollection.findOne(query);
-      let isAdmin = "seeker";
+      let isAdmin = "";
+
       if (user?.role === "admin") {
         isAdmin = "admin";
+
       } else if (user?.role === "seeker") {
         isAdmin = "seeker";
+
       } else if (user?.role === "company") {
         isAdmin = "company";
+
       }
       console.log(isAdmin);
       res.json({ admin: isAdmin });
