@@ -528,6 +528,7 @@ async function run() {
     app.put("/faqDislike/:email", async (req, res) => {
       const email = req.params.email;
       const updated = req.body;
+      console.log(email, updated);
 
       const filter = { _id: objectId(updated?._id) };
 
@@ -548,20 +549,17 @@ async function run() {
       );
 
       if (email && isFound === -1) {
-        let removeLike = [];
         if (isOppositeFound !== -1) {
-          removeLike = await updated?.liked.filter(single => single !== email);
+          await updated?.liked.splice(isOppositeFound, isOppositeFound + 1)[0];
         }
-        console.log(removeLike);
 
         await updated?.disliked.push(email);
         const finalizeDoc = {
           comment: updated.comment,
           reply: updated.reply,
-          liked: removeLike,
-          disliked: updated.disliked
+          liked: updated.liked,
+          disliked: updated.disliked,
         };
-
         const updateDoc = {
           $set: finalizeDoc,
         };
@@ -569,14 +567,13 @@ async function run() {
 
         res.json(result);
       } else if (email && isFound !== -1 && updated?.disliked.length) {
-        let removeDislike = await updated?.disliked.filter(single => single !== email);
-        console.log(removeDislike);
+        await updated?.disliked.splice(isFound, isFound + 1)[0];
 
         const finalizeDoc = {
           comment: updated.comment,
           reply: updated.reply,
           liked: updated.liked,
-          disliked: removeDislike
+          disliked: updated.disliked,
         };
 
         const updateDoc = {
@@ -634,37 +631,37 @@ async function run() {
       );
 
       if (email && isFound === -1) {
-        let removeDislike = [];
         if (isOppositeFound !== -1) {
-          removeDislike = await updated?.disliked.filter(single => single !== email);
+          await updated?.disliked.splice(
+            isOppositeFound,
+            isOppositeFound + 1
+          )[0];
         }
-        console.log(removeDislike);
 
         await updated?.liked.push(email);
         const finalizeDoc = {
           comment: updated.comment,
           reply: updated.reply,
           liked: updated.liked,
-          disliked: removeDislike
+          disliked: updated.disliked,
         };
         const updateDoc = {
-          $set: finalizeDoc
+          $set: finalizeDoc,
         };
         const result = await faq.updateOne(filter, updateDoc);
 
         res.json(result);
       } else if (email && isFound !== -1 && updated?.liked.length) {
-        let removeLike = await updated?.liked.filter(single => single !== email);
-        console.log(removeLike);
+        await updated?.liked.splice(isFound, isFound + 1)[0];
 
         const finalizeDoc = {
           comment: updated.comment,
           reply: updated.reply,
-          liked: removeLike,
-          disliked: updated.disliked
+          liked: updated.liked,
+          disliked: updated.disliked,
         };
         const updateDoc = {
-          $set: finalizeDoc
+          $set: finalizeDoc,
         };
         const result = await faq.updateOne(filter, updateDoc);
 
