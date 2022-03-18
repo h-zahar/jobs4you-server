@@ -352,7 +352,7 @@ async function run() {
     //google sign in user update/put function
     app.put("/users", async (req, res) => {
       const user = req.body;
-      // user.role = 'seeker';
+      user.role = 'seeker';
       console.log("this is google user", user);
       const filter = { email: user.email };
       const options = { upsert: true };
