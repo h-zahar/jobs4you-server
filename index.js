@@ -35,6 +35,7 @@ app.use(fileUpload());
 // })
 
 // const uploadStorage = multer({ storage: storage })
+/// Git trying
 const port = process.env.PORT || 5000;
 
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.11xcw.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
@@ -277,6 +278,17 @@ async function run() {
         res.json(result);
       });
     });
+    // Delete resume
+    app.delete('/resume/:id', async (req, res) => {
+      const id = req.params.id;
+      console.log(id)
+      const query = { _id: objectId(id) };
+      const result = await resumeCollection.deleteOne(query);
+
+      console.log('deleting resume with id ', result);
+
+      res.json(result);
+  })
 
     // End Sadia Code //
 
@@ -312,22 +324,24 @@ async function run() {
       res.json({ admin: isAdmin });
     });
 
-    //admin role get api
-    app.get("/users/:email", async (req, res) => {
-      const email = req.params.email;
-      const query = { email: email };
-      const user = await userCollection.findOne(query);
-      let isAdmin = "user";
-      if (user?.role === "admin") {
-        isAdmin = "admin";
-      } else if (user?.role === "seeker") {
-        isAdmin = "seeker";
-      } else if (user?.role === "company") {
-        isAdmin = "company";
-      }
+    // //admin role get api
+    // app.get('/users/:email', async (req, res) => {
+    //   const email = req.params.email;
+    //   const query = { email: email };
+    //   const user = await userCollection.findOne(query);
+    //   let isAdmin = 'user';
+    //   if (user?.role === 'admin') {
+    //     isAdmin = 'admin';
+    //   }
+    //   else if (user?.role === 'seeker') {
+    //     isAdmin = 'seeker';
+    //   }
+    //   else if (user?.role === 'company') {
+    //     isAdmin = 'company';
+    //   }
 
-      res.json({ admin: isAdmin });
-    });
+    //   res.json({ admin: isAdmin });
+    // })
 
     //get all review
     app.get("/reviews", async (req, res) => {
