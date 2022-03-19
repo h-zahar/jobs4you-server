@@ -187,6 +187,7 @@ async function run() {
       const company = req.body.company;
       const jobLocation = req.body.jobLocation;
       const employmentStatus = req.body.employmentStatus;
+      const jobApplicationDeadline = req.body.applicationDeadline;
       const image = req.body.image;
       const firstName = req.body.firstName;
       const lastName = req.body.lastName;
@@ -211,6 +212,7 @@ async function run() {
         company,
         jobLocation,
         employmentStatus,
+        jobApplicationDeadline,
         image,
         firstName,
         lastName,
