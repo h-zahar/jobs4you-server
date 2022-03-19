@@ -372,13 +372,12 @@ async function run() {
       const result = await userCollection.updateOne(filter, updateDoc);
       res.json(result);
     });
-
     // Nuzhat's Server
 
     // Post a Job
     app.post("/jobs", async (req, res) => {
       const job = req.body;
-      job.status = "Pending";
+      job.status = "pending";
       const result = await jobs.insertOne(job);
       console.log(result);
       res.json(result);
@@ -797,19 +796,24 @@ async function run() {
     // Edit Company profile
     app.put("/singleCompany/:id", async (req, res) => {
       const filter = { _id: objectId(req.params.id) };
+      const options = { upsert: true };
       console.log(filter);
       const updateStatus = {
         $set: {
           cname: req.body.cname,
           contact: req.body.contact,
+          email: req.body.email,
           industry: req.body.industry,
-          founded: req.body.founded,
           country: req.body.country,
+          noe: req.body.noe,
+          nob: req.body.nob,
+          website: req.body.website,
         },
       };
       const updateResult = await employersCollection.updateOne(
         filter,
-        updateStatus
+        updateStatus,
+        options
       );
       console.log(updateResult);
       res.json(updateResult);
