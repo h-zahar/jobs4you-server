@@ -259,22 +259,7 @@ async function run() {
 
       
 });
-app.put("/updateInfo/:id", async (req, res) => {
-  const id = req.params.id;
-  const updatedInfo = req.body;
-  const filter = { _id: objectId(id) };
-  const options = { upsert: true };
-  const updateDoc = {
-      $set: {
 
-        resumepdfFile: updatedInfo.resumepdfFile,
-          
-      },
-  };
-  const result = await resumeCollection.updateOne(filter, updateDoc, options)
-  console.log('updating', updatedInfo)
-  res.json(result)
-});
     // Delete resume
     app.delete('/resume/:id', async (req, res) => {
       const id = req.params.id;
