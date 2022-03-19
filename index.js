@@ -180,6 +180,9 @@ async function run() {
       res.json(apply);
     });
     app.post("/applyList", async (req, res) => {
+      // console.log(req.body)
+      
+      const jobId = req.body.jobId;
       const job = req.body.job;
       const company = req.body.company;
       const jobLocation = req.body.jobLocation;
@@ -203,6 +206,7 @@ async function run() {
       const coverLetterPdfBuffer = Buffer.from(encodedcoverletterPdf, "base64");
 
       const apply = {
+        jobId,
         job,
         company,
         jobLocation,
@@ -221,7 +225,7 @@ async function run() {
       };
       const result = await applyList.insertOne(apply);
       res.send(result);
-      console.log(apply);
+      console.log("ApplyList" ,apply);
     });
 
     // Get RESUME
