@@ -181,7 +181,7 @@ async function run() {
     });
     app.post("/applyList", async (req, res) => {
       // console.log(req.body)
-      
+
       const jobId = req.body.jobId;
       const job = req.body.job;
       const company = req.body.company;
@@ -225,7 +225,7 @@ async function run() {
       };
       const result = await applyList.insertOne(apply);
       res.send(result);
-      console.log("ApplyList" ,apply);
+      console.log("ApplyList", apply);
     });
 
     // Get RESUME
@@ -261,8 +261,8 @@ async function run() {
       res.send(result);
       console.log(resumeUpload);
 
-      
-});
+
+    });
 
     // Delete resume
     app.delete('/resume/:id', async (req, res) => {
@@ -312,6 +312,13 @@ async function run() {
       }
       console.log(isAdmin);
       res.json({ admin: isAdmin });
+    });
+    app.get("/usersDetails/:email", async (req, res) => {
+      const email = req.params.email;
+      const query = { email: email };
+      const user = await userCollection.findOne(query);
+
+      res.json(user);
     });
 
     // //admin role get api
