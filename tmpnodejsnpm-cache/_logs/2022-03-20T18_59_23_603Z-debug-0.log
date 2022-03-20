@@ -1,0 +1,42 @@
+0 verbose cli [
+0 verbose cli   'C:\\Program Files\\nodejs\\node.exe',
+0 verbose cli   'C:\\Users\\nupa_\\AppData\\Roaming\\npm\\node_modules\\npm\\bin\\npm-cli.js',
+0 verbose cli   'start'
+0 verbose cli ]
+1 info using npm@8.5.1
+2 info using node@v16.14.0
+3 timing npm:load:whichnode Completed in 0ms
+4 timing config:load:defaults Completed in 1ms
+5 timing config:load:file:C:\Users\nupa_\AppData\Roaming\npm\node_modules\npm\npmrc Completed in 3ms
+6 timing config:load:builtin Completed in 3ms
+7 timing config:load:cli Completed in 2ms
+8 timing config:load:env Completed in 0ms
+9 timing config:load:file:C:\WebDev_Batch04\End_Game\Final_Team_Project\jobs4you-server\.npmrc Completed in 0ms
+10 timing config:load:project Completed in 3ms
+11 timing config:load:file:C:\Users\nupa_\.npmrc Completed in 0ms
+12 timing config:load:user Completed in 0ms
+13 timing config:load:file:C:\Users\nupa_\AppData\Roaming\npm\etc\npmrc Completed in 1ms
+14 timing config:load:global Completed in 1ms
+15 timing config:load:validate Completed in 1ms
+16 timing config:load:credentials Completed in 0ms
+17 timing config:load:setEnvs Completed in 1ms
+18 timing config:load Completed in 12ms
+19 timing npm:load:configload Completed in 12ms
+20 timing npm:load:setTitle Completed in 0ms
+21 timing config:load:flatten Completed in 2ms
+22 timing npm:load:display Completed in 3ms
+23 verbose logfile C:\WebDev_Batch04\End_Game\Final_Team_Project\jobs4you-server\tmpnodejsnpm-cache\_logs\2022-03-20T18_59_23_603Z-debug-0.log
+24 timing npm:load:logFile Completed in 14ms
+25 timing npm:load:timers Completed in 0ms
+26 timing npm:load:configScope Completed in 0ms
+27 timing npm:load Completed in 30ms
+28 timing command:run-script Completed in 374ms
+29 timing command:start Completed in 380ms
+30 notice
+30 notice New [32mpatch[39m version of npm available! [31m8.5.1[39m -> [32m8.5.5[39m
+30 notice Changelog: [36mhttps://github.com/npm/cli/releases/tag/v8.5.5[39m
+30 notice Run [32mnpm install -g npm@8.5.5[39m to update!
+30 notice
+31 verbose exit 1
+32 timing npm Completed in 569ms
+33 verbose code 1
