@@ -187,6 +187,8 @@ async function run() {
       const company = req.body.company;
       const jobLocation = req.body.jobLocation;
       const employmentStatus = req.body.employmentStatus;
+      const jobApplicationDeadline = req.body.applicationDeadline;
+      const percentage = req.body.percentage;
       const image = req.body.image;
       const firstName = req.body.firstName;
       const lastName = req.body.lastName;
@@ -211,6 +213,8 @@ async function run() {
         company,
         jobLocation,
         employmentStatus,
+        jobApplicationDeadline,
+        percentage,
         image,
         firstName,
         lastName,
@@ -379,13 +383,12 @@ async function run() {
       const result = await userCollection.updateOne(filter, updateDoc);
       res.json(result);
     });
-
     // Nuzhat's Server
 
     // Post a Job
     app.post("/jobs", async (req, res) => {
       const job = req.body;
-      job.status = "Pending";
+      job.status = "pending";
       const result = await jobs.insertOne(job);
       console.log(result);
       res.json(result);
@@ -535,7 +538,6 @@ async function run() {
     app.put("/faqDislike/:email", async (req, res) => {
       const email = req.params.email;
       const updated = req.body;
-      console.log(email, updated);
 
       const filter = { _id: objectId(updated?._id) };
 
@@ -556,17 +558,20 @@ async function run() {
       );
 
       if (email && isFound === -1) {
+        let removeLike = [];
         if (isOppositeFound !== -1) {
-          await updated?.liked.splice(isOppositeFound, isOppositeFound + 1)[0];
+          removeLike = await updated?.liked.filter(single => single !== email);
         }
+        console.log(removeLike);
 
         await updated?.disliked.push(email);
         const finalizeDoc = {
           comment: updated.comment,
           reply: updated.reply,
-          liked: updated.liked,
-          disliked: updated.disliked,
+          liked: removeLike,
+          disliked: updated.disliked
         };
+
         const updateDoc = {
           $set: finalizeDoc,
         };
@@ -574,13 +579,14 @@ async function run() {
 
         res.json(result);
       } else if (email && isFound !== -1 && updated?.disliked.length) {
-        await updated?.disliked.splice(isFound, isFound + 1)[0];
+        let removeDislike = await updated?.disliked.filter(single => single !== email);
+        console.log(removeDislike);
 
         const finalizeDoc = {
           comment: updated.comment,
           reply: updated.reply,
           liked: updated.liked,
-          disliked: updated.disliked,
+          disliked: removeDislike
         };
 
         const updateDoc = {
@@ -638,37 +644,37 @@ async function run() {
       );
 
       if (email && isFound === -1) {
+        let removeDislike = [];
         if (isOppositeFound !== -1) {
-          await updated?.disliked.splice(
-            isOppositeFound,
-            isOppositeFound + 1
-          )[0];
+          removeDislike = await updated?.disliked.filter(single => single !== email);
         }
+        console.log(removeDislike);
 
         await updated?.liked.push(email);
         const finalizeDoc = {
           comment: updated.comment,
           reply: updated.reply,
           liked: updated.liked,
-          disliked: updated.disliked,
+          disliked: removeDislike
         };
         const updateDoc = {
-          $set: finalizeDoc,
+          $set: finalizeDoc
         };
         const result = await faq.updateOne(filter, updateDoc);
 
         res.json(result);
       } else if (email && isFound !== -1 && updated?.liked.length) {
-        await updated?.liked.splice(isFound, isFound + 1)[0];
+        let removeLike = await updated?.liked.filter(single => single !== email);
+        console.log(removeLike);
 
         const finalizeDoc = {
           comment: updated.comment,
           reply: updated.reply,
-          liked: updated.liked,
-          disliked: updated.disliked,
+          liked: removeLike,
+          disliked: updated.disliked
         };
         const updateDoc = {
-          $set: finalizeDoc,
+          $set: finalizeDoc
         };
         const result = await faq.updateOne(filter, updateDoc);
 
@@ -804,19 +810,24 @@ async function run() {
     // Edit Company profile
     app.put("/singleCompany/:id", async (req, res) => {
       const filter = { _id: objectId(req.params.id) };
+      const options = { upsert: true };
       console.log(filter);
       const updateStatus = {
         $set: {
           cname: req.body.cname,
           contact: req.body.contact,
+          email: req.body.email,
           industry: req.body.industry,
-          founded: req.body.founded,
           country: req.body.country,
+          noe: req.body.noe,
+          nob: req.body.nob,
+          website: req.body.website,
         },
       };
       const updateResult = await employersCollection.updateOne(
         filter,
-        updateStatus
+        updateStatus,
+        options
       );
       console.log(updateResult);
       res.json(updateResult);
