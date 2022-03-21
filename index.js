@@ -188,6 +188,7 @@ async function run() {
       const jobLocation = req.body.jobLocation;
       const employmentStatus = req.body.employmentStatus;
       const jobApplicationDeadline = req.body.applicationDeadline;
+      const percentage = req.body.percentage;
       const image = req.body.image;
       const firstName = req.body.firstName;
       const lastName = req.body.lastName;
@@ -213,6 +214,7 @@ async function run() {
         jobLocation,
         employmentStatus,
         jobApplicationDeadline,
+        percentage,
         image,
         firstName,
         lastName,
