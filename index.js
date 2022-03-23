@@ -318,9 +318,10 @@ async function run() {
       res.json({ admin: isAdmin });
     });
     app.get("/usersDetails/:email", async (req, res) => {
+      console.log(req.params);
       const email = req.params.email;
-      const query = { email: email };
-      const user = await userCollection.findOne(query);
+      const query = { pEmail: email };
+      const user = await candidatesCollection.findOne(query);
 
       res.json(user);
     });
