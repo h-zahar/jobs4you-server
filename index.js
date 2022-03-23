@@ -53,9 +53,9 @@ const io = socketio(server, {
   cors: {
     origin: "*",
     // allowedHeaders: ["accept-header"],
-    methods: ["GET", "POST"],
+    // methods: ["GET", "POST"],
     // credentials: true
-  },
+  }
 });
 
 // Establishing Connection - Rifat
