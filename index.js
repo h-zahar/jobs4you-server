@@ -14,8 +14,8 @@ const {
   getUsersInRoom,
   getRemainedUsersInRoom,
 } = require("./users");
-const pdf=require('html-pdf');
-const pdfTemplate=require('./PdfCreate')
+const pdf = require("html-pdf");
+const pdfTemplate = require("./PdfCreate");
 // const multer = require("multer")
 
 const objectId = require("mongodb").ObjectId;
@@ -35,6 +35,7 @@ app.use(fileUpload());
 // })
 
 // const uploadStorage = multer({ storage: storage })
+/// Git trying
 const port = process.env.PORT || 5000;
 
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.11xcw.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
@@ -179,10 +180,15 @@ async function run() {
       res.json(apply);
     });
     app.post("/applyList", async (req, res) => {
+      // console.log(req.body)
+
+      const jobId = req.body.jobId;
       const job = req.body.job;
       const company = req.body.company;
       const jobLocation = req.body.jobLocation;
       const employmentStatus = req.body.employmentStatus;
+      const jobApplicationDeadline = req.body.applicationDeadline;
+      const percentage = req.body.percentage;
       const image = req.body.image;
       const firstName = req.body.firstName;
       const lastName = req.body.lastName;
@@ -202,10 +208,13 @@ async function run() {
       const coverLetterPdfBuffer = Buffer.from(encodedcoverletterPdf, "base64");
 
       const apply = {
+        jobId,
         job,
         company,
         jobLocation,
         employmentStatus,
+        jobApplicationDeadline,
+        percentage,
         image,
         firstName,
         lastName,
@@ -220,7 +229,7 @@ async function run() {
       };
       const result = await applyList.insertOne(apply);
       res.send(result);
-      console.log(apply);
+      console.log("ApplyList", apply);
     });
 
     // Get RESUME
@@ -256,27 +265,20 @@ async function run() {
       res.send(result);
       console.log(resumeUpload);
 
-      // Update Resume API
 
-      app.put("/updateInfo/:id", async (req, res) => {
-        const id = req.params.id;
-        const updatedInfo = req.body;
-        const filter = { _id: objectId(id) };
-        const options = { upsert: true };
-        const updateDoc = {
-          $set: {
-            resume: updatedInfo.resume,
-          },
-        };
-        const result = await resumeCollection.updateOne(
-          filter,
-          updateDoc,
-          options
-        );
-        console.log("updating", updatedInfo);
-        res.json(result);
-      });
     });
+
+    // Delete resume
+    app.delete('/resume/:id', async (req, res) => {
+      const id = req.params.id;
+      console.log(id)
+      const query = { _id: objectId(id) };
+      const result = await resumeCollection.deleteOne(query);
+
+      console.log('deleting resume with id ', result);
+
+      res.json(result);
+    })
 
     // End Sadia Code //
 
@@ -290,46 +292,57 @@ async function run() {
       console.log(result);
       res.json(result);
     });
-    app.get('/users', async (req, res) => {
+    app.get("/users", async (req, res) => {
       const cursor = userCollection.find({});
       const user = await cursor.toArray();
-      res.send(user)
-    })
+      res.send(user);
+    });
     //admin role get api
     app.get("/users/:email", async (req, res) => {
       const email = req.params.email;
       const query = { email: email };
       const user = await userCollection.findOne(query);
-      let isAdmin = "seeker";
+      let isAdmin = "";
+
       if (user?.role === "admin") {
         isAdmin = "admin";
+
       } else if (user?.role === "seeker") {
         isAdmin = "seeker";
+
       } else if (user?.role === "company") {
         isAdmin = "company";
+
       }
       console.log(isAdmin);
       res.json({ admin: isAdmin });
     });
-
-    //admin role get api
-    app.get('/users/:email', async (req, res) => {
+    app.get("/usersDetails/:email", async (req, res) => {
       const email = req.params.email;
       const query = { email: email };
       const user = await userCollection.findOne(query);
-      let isAdmin = 'user';
-      if (user?.role === 'admin') {
-        isAdmin = 'admin';
-      }
-      else if (user?.role === 'seeker') {
-        isAdmin = 'seeker';
-      }
-      else if (user?.role === 'company') {
-        isAdmin = 'company';
-      }
 
-      res.json({ admin: isAdmin });
-    })
+      res.json(user);
+    });
+
+    // //admin role get api
+    // app.get('/users/:email', async (req, res) => {
+    //   const email = req.params.email;
+    //   const query = { email: email };
+    //   const user = await userCollection.findOne(query);
+    //   let isAdmin = 'user';
+    //   if (user?.role === 'admin') {
+    //     isAdmin = 'admin';
+    //   }
+    //   else if (user?.role === 'seeker') {
+    //     isAdmin = 'seeker';
+    //   }
+    //   else if (user?.role === 'company') {
+    //     isAdmin = 'company';
+    //   }
+
+    //   res.json({ admin: isAdmin });
+    // })
 
     //get all review
     app.get("/reviews", async (req, res) => {
@@ -354,8 +367,8 @@ async function run() {
     //google sign in user update/put function
     app.put("/users", async (req, res) => {
       const user = req.body;
-      // user.role = 'seeker';
-      console.log('this is google user', user);
+      user.role = 'seeker';
+      console.log("this is google user", user);
       const filter = { email: user.email };
       const options = { upsert: true };
       const updateDoc = { $set: user };
@@ -375,7 +388,7 @@ async function run() {
     // Post a Job
     app.post("/jobs", async (req, res) => {
       const job = req.body;
-      job.status = "Pending";
+      job.status = "pending";
       const result = await jobs.insertOne(job);
       console.log(result);
       res.json(result);
@@ -408,7 +421,7 @@ async function run() {
     // Server - Rifat
 
     // Skill Add
-    app.get('/posted-skills/:id', async (req, res) => {
+    app.get("/posted-skills/:id", async (req, res) => {
       const id = req.params.id;
       const query = { _id: objectId(id) };
       const result = await jobs.findOne(query);
@@ -419,10 +432,9 @@ async function run() {
       if (skills) {
         res.json(skills);
       }
-
     });
 
-    app.get('/skills/:email', async (req, res) => {
+    app.get("/skills/:email", async (req, res) => {
       const email = req.params.email;
       const query = { email: email };
       const result = await skills.findOne(query);
@@ -430,7 +442,6 @@ async function run() {
       if (result?.skills) {
         res.json(result.skills);
       }
-
     });
 
     app.put("/skills", async (req, res) => {
@@ -439,7 +450,7 @@ async function run() {
       const options = { upsert: true };
 
       const upsertedDoc = {
-        $set: upsertDoc
+        $set: upsertDoc,
       };
 
       const result = await skills.updateOne(filter, upsertedDoc, options);
@@ -527,7 +538,6 @@ async function run() {
     app.put("/faqDislike/:email", async (req, res) => {
       const email = req.params.email;
       const updated = req.body;
-      console.log(email, updated);
 
       const filter = { _id: objectId(updated?._id) };
 
@@ -548,17 +558,20 @@ async function run() {
       );
 
       if (email && isFound === -1) {
+        let removeLike = [];
         if (isOppositeFound !== -1) {
-          await updated?.liked.splice(isOppositeFound, isOppositeFound + 1)[0];
+          removeLike = await updated?.liked.filter(single => single !== email);
         }
+        console.log(removeLike);
 
         await updated?.disliked.push(email);
         const finalizeDoc = {
           comment: updated.comment,
           reply: updated.reply,
-          liked: updated.liked,
-          disliked: updated.disliked,
+          liked: removeLike,
+          disliked: updated.disliked
         };
+
         const updateDoc = {
           $set: finalizeDoc,
         };
@@ -566,13 +579,14 @@ async function run() {
 
         res.json(result);
       } else if (email && isFound !== -1 && updated?.disliked.length) {
-        await updated?.disliked.splice(isFound, isFound + 1)[0];
+        let removeDislike = await updated?.disliked.filter(single => single !== email);
+        console.log(removeDislike);
 
         const finalizeDoc = {
           comment: updated.comment,
           reply: updated.reply,
           liked: updated.liked,
-          disliked: updated.disliked,
+          disliked: removeDislike
         };
 
         const updateDoc = {
@@ -630,37 +644,37 @@ async function run() {
       );
 
       if (email && isFound === -1) {
+        let removeDislike = [];
         if (isOppositeFound !== -1) {
-          await updated?.disliked.splice(
-            isOppositeFound,
-            isOppositeFound + 1
-          )[0];
+          removeDislike = await updated?.disliked.filter(single => single !== email);
         }
+        console.log(removeDislike);
 
         await updated?.liked.push(email);
         const finalizeDoc = {
           comment: updated.comment,
           reply: updated.reply,
           liked: updated.liked,
-          disliked: updated.disliked,
+          disliked: removeDislike
         };
         const updateDoc = {
-          $set: finalizeDoc,
+          $set: finalizeDoc
         };
         const result = await faq.updateOne(filter, updateDoc);
 
         res.json(result);
       } else if (email && isFound !== -1 && updated?.liked.length) {
-        await updated?.liked.splice(isFound, isFound + 1)[0];
+        let removeLike = await updated?.liked.filter(single => single !== email);
+        console.log(removeLike);
 
         const finalizeDoc = {
           comment: updated.comment,
           reply: updated.reply,
-          liked: updated.liked,
-          disliked: updated.disliked,
+          liked: removeLike,
+          disliked: updated.disliked
         };
         const updateDoc = {
-          $set: finalizeDoc,
+          $set: finalizeDoc
         };
         const result = await faq.updateOne(filter, updateDoc);
 
@@ -708,7 +722,7 @@ async function run() {
     });
     // create pdf ( Raju )
     app.post("/createPdf", (req, res) => {
-      console.log('server hit',req.body);
+      console.log("server hit", req.body);
       pdf.create(pdfTemplate(req.body), {}).toFile("result.pdf", (err) => {
         if (err) {
           res.send(Promise.reject());
@@ -726,16 +740,16 @@ async function run() {
     });
 
     // Job-seekers && recruiter's profile
-    app.post('/addProfile', async(req,res)=>{
-      const profileInfo=req.body
+    app.post("/addProfile", async (req, res) => {
+      const profileInfo = req.body;
       let insertedProfile;
-     if(profileInfo.pEmail){
-       insertedProfile= await candidatesCollection.insertOne(profileInfo)
-     }else{
-      insertedProfile= await employersCollection.insertOne(profileInfo)
-     }
-      res.json(insertedProfile)
-    })
+      if (profileInfo.pEmail) {
+        insertedProfile = await candidatesCollection.insertOne(profileInfo);
+      } else {
+        insertedProfile = await employersCollection.insertOne(profileInfo);
+      }
+      res.json(insertedProfile);
+    });
     // All profile
     app.get("/allprofiles", async (req, res) => {
       const allCandidates = await candidatesCollection.find({}).toArray();
@@ -755,23 +769,23 @@ async function run() {
       const candidate = await candidatesCollection.findOne(query);
       res.json(candidate);
     });
-    app.get('/individualCandidate/:email', async (req, res) => {
-      const queryEmail= req.params.email;
-      console.log(queryEmail)
-      const query = {pEmail:queryEmail};
-      console.log(query)
+    app.get("/individualCandidate/:email", async (req, res) => {
+      const queryEmail = req.params.email;
+      console.log(queryEmail);
+      const query = { pEmail: queryEmail };
+      console.log(query);
       const candidate = await candidatesCollection.findOne(query);
       res.json(candidate);
-      })
-      //   get single companyProfile by email
-      app.get('/individualCompany/:email', async (req, res) => {
-      const queryEmail= req.params.email;
-      console.log(queryEmail)
-      const query = {email:queryEmail};
-      console.log(query)
+    });
+    //   get single companyProfile by email
+    app.get("/individualCompany/:email", async (req, res) => {
+      const queryEmail = req.params.email;
+      console.log(queryEmail);
+      const query = { email: queryEmail };
+      console.log(query);
       const candidate = await employersCollection.findOne(query);
       res.json(candidate);
-      })
+    });
     // Edit profile
     app.put("/singleProfile/:id", async (req, res) => {
       const filter = { _id: objectId(req.params.id) };
@@ -784,7 +798,6 @@ async function run() {
           lname: req.body.lname,
           address: req.body.address,
           eContact: req.body.eContact,
-        
         },
       };
       const updateResult = await candidatesCollection.updateOne(
@@ -797,20 +810,24 @@ async function run() {
     // Edit Company profile
     app.put("/singleCompany/:id", async (req, res) => {
       const filter = { _id: objectId(req.params.id) };
+      const options = { upsert: true };
       console.log(filter);
       const updateStatus = {
         $set: {
           cname: req.body.cname,
           contact: req.body.contact,
+          email: req.body.email,
           industry: req.body.industry,
-          founded: req.body.founded,
           country: req.body.country,
-        
+          noe: req.body.noe,
+          nob: req.body.nob,
+          website: req.body.website,
         },
       };
       const updateResult = await employersCollection.updateOne(
         filter,
-        updateStatus
+        updateStatus,
+        options
       );
       console.log(updateResult);
       res.json(updateResult);
