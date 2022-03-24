@@ -380,6 +380,22 @@ async function run() {
       const result = await userCollection.updateOne(filter, updateDoc);
       res.json(result);
     });
+    //order update/put function
+    app.put('/jobs/:id', async (req, res) => {
+      const id = req.params.id;
+      // const newOrderStatus = req.body;
+      const filter = { _id: objectId(id) };
+      const options = { upsert: true };
+      const updateDoc = {
+        $set: {
+          status: 'approved'
+
+        },
+      };
+      const result = await jobs.updateOne(filter, updateDoc, options);
+      console.log('will be updating', id, result, updateDoc)
+      res.json(result);
+    })
     // Nuzhat's Server
 
     // Post a Job
