@@ -53,9 +53,9 @@ const io = socketio(server, {
   cors: {
     origin: "*",
     // allowedHeaders: ["accept-header"],
-    methods: ["GET", "POST"],
+    // methods: ["GET", "POST"],
     // credentials: true
-  },
+  }
 });
 
 // Establishing Connection - Rifat
@@ -129,6 +129,7 @@ async function run() {
     const applyList = database.collection("applyList");
     const userCollection = database.collection("users");
     const resumeCollection = database.collection("resumes");
+    const notifications = database.collection("notifications");
     // ... Raju's DB && Collection
     const profileDB = client.db("AllProfiles");
     const govJobsCollection = database.collection("Gov-jobs");
@@ -454,6 +455,51 @@ async function run() {
       if (result?.acknowledged) {
         res.json(result);
       }
+    });
+
+    // Notifications
+    app.get("/notifications/:email", async (req, res) => {
+      const email = req.params.email;
+      const filter = { email: email };
+
+      const cursor = notifications.find(filter);
+
+
+      const result = await cursor.toArray();
+
+      if (result) {
+        res.json(result);
+      }
+    });
+
+    app.post("/notifications", async (req, res) => {
+      const { email, message, link } = req.body;
+
+      const insertDoc = { email: email, message: message, link: link };
+
+      const result = await notifications.insertOne(insertDoc);
+
+      if (result) {
+        res.json(result.acknowledged);
+      }
+    });
+
+    app.put("/notifications/:id", async (req, res) => {
+      const id = req.params.id;
+      const filter = { _id: objectId(id) };
+      const holdedDoc = req.body;
+      holdedDoc.isClicked = true;
+
+      const updateDoc = {
+        $set: holdedDoc
+      };
+
+      const result = await notifications.updateOne(filter, updateDoc);
+
+      if (result) {
+        res.json(result);
+      }
+
     });
 
     // Company Collection
