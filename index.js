@@ -53,9 +53,9 @@ const io = socketio(server, {
   cors: {
     origin: "*",
     // allowedHeaders: ["accept-header"],
-    methods: ["GET", "POST"],
+    // methods: ["GET", "POST"],
     // credentials: true
-  },
+  }
 });
 
 // Establishing Connection - Rifat
@@ -129,6 +129,7 @@ async function run() {
     const applyList = database.collection("applyList");
     const userCollection = database.collection("users");
     const resumeCollection = database.collection("resumes");
+    const notifications = database.collection("notifications");
     // ... Raju's DB && Collection
     const profileDB = client.db("AllProfiles");
     const govJobsCollection = database.collection("Gov-jobs");
@@ -264,21 +265,19 @@ async function run() {
       const result = await resumeCollection.insertOne(resumeUpload);
       res.send(result);
       console.log(resumeUpload);
-
-
     });
 
     // Delete resume
-    app.delete('/resume/:id', async (req, res) => {
+    app.delete("/resume/:id", async (req, res) => {
       const id = req.params.id;
-      console.log(id)
+      console.log(id);
       const query = { _id: objectId(id) };
       const result = await resumeCollection.deleteOne(query);
 
-      console.log('deleting resume with id ', result);
+      console.log("deleting resume with id ", result);
 
       res.json(result);
-    })
+    });
 
     // End Sadia Code //
 
@@ -306,13 +305,10 @@ async function run() {
 
       if (user?.role === "admin") {
         isAdmin = "admin";
-
       } else if (user?.role === "seeker") {
         isAdmin = "seeker";
-
       } else if (user?.role === "company") {
         isAdmin = "company";
-
       }
       console.log(isAdmin);
       res.json({ admin: isAdmin });
@@ -368,7 +364,7 @@ async function run() {
     //google sign in user update/put function
     app.put("/users", async (req, res) => {
       const user = req.body;
-      user.role = 'seeker';
+      user.role = "seeker";
       console.log("this is google user", user);
       const filter = { email: user.email };
       const options = { upsert: true };
@@ -477,6 +473,51 @@ async function run() {
       }
     });
 
+    // Notifications
+    app.get("/notifications/:email", async (req, res) => {
+      const email = req.params.email;
+      const filter = { email: email };
+
+      const cursor = notifications.find(filter);
+
+
+      const result = await cursor.toArray();
+
+      if (result) {
+        res.json(result);
+      }
+    });
+
+    app.post("/notifications", async (req, res) => {
+      const { email, message, link } = req.body;
+
+      const insertDoc = { email: email, message: message, link: link };
+
+      const result = await notifications.insertOne(insertDoc);
+
+      if (result) {
+        res.json(result.acknowledged);
+      }
+    });
+
+    app.put("/notifications/:id", async (req, res) => {
+      const id = req.params.id;
+      const filter = { _id: objectId(id) };
+      const holdedDoc = req.body;
+      holdedDoc.isClicked = true;
+
+      const updateDoc = {
+        $set: holdedDoc
+      };
+
+      const result = await notifications.updateOne(filter, updateDoc);
+
+      if (result) {
+        res.json(result);
+      }
+
+    });
+
     // Company Collection
     app.get("/top", async (req, res) => {
       const query = {};
@@ -577,7 +618,9 @@ async function run() {
       if (email && isFound === -1) {
         let removeLike = [];
         if (isOppositeFound !== -1) {
-          removeLike = await updated?.liked.filter(single => single !== email);
+          removeLike = await updated?.liked.filter(
+            (single) => single !== email
+          );
         }
         console.log(removeLike);
 
@@ -586,7 +629,7 @@ async function run() {
           comment: updated.comment,
           reply: updated.reply,
           liked: removeLike,
-          disliked: updated.disliked
+          disliked: updated.disliked,
         };
 
         const updateDoc = {
@@ -596,14 +639,16 @@ async function run() {
 
         res.json(result);
       } else if (email && isFound !== -1 && updated?.disliked.length) {
-        let removeDislike = await updated?.disliked.filter(single => single !== email);
+        let removeDislike = await updated?.disliked.filter(
+          (single) => single !== email
+        );
         console.log(removeDislike);
 
         const finalizeDoc = {
           comment: updated.comment,
           reply: updated.reply,
           liked: updated.liked,
-          disliked: removeDislike
+          disliked: removeDislike,
         };
 
         const updateDoc = {
@@ -663,7 +708,9 @@ async function run() {
       if (email && isFound === -1) {
         let removeDislike = [];
         if (isOppositeFound !== -1) {
-          removeDislike = await updated?.disliked.filter(single => single !== email);
+          removeDislike = await updated?.disliked.filter(
+            (single) => single !== email
+          );
         }
         console.log(removeDislike);
 
@@ -672,26 +719,28 @@ async function run() {
           comment: updated.comment,
           reply: updated.reply,
           liked: updated.liked,
-          disliked: removeDislike
+          disliked: removeDislike,
         };
         const updateDoc = {
-          $set: finalizeDoc
+          $set: finalizeDoc,
         };
         const result = await faq.updateOne(filter, updateDoc);
 
         res.json(result);
       } else if (email && isFound !== -1 && updated?.liked.length) {
-        let removeLike = await updated?.liked.filter(single => single !== email);
+        let removeLike = await updated?.liked.filter(
+          (single) => single !== email
+        );
         console.log(removeLike);
 
         const finalizeDoc = {
           comment: updated.comment,
           reply: updated.reply,
           liked: removeLike,
-          disliked: updated.disliked
+          disliked: updated.disliked,
         };
         const updateDoc = {
-          $set: finalizeDoc
+          $set: finalizeDoc,
         };
         const result = await faq.updateOne(filter, updateDoc);
 
@@ -737,6 +786,14 @@ async function run() {
       console.log(updateResult);
       res.json(updateResult);
     });
+    // Delete govjob
+    app.delete('/deleteGovjob/:id', async (req, res) => {
+      const id = req.params.id;
+      console.log(id)
+      const query = { _id: objectId(id) };
+      const result = await govJobsCollection.deleteOne(query);
+      res.json(result);
+    })
     // create pdf ( Raju )
     app.post("/createPdf", (req, res) => {
       console.log("server hit", req.body);
@@ -794,6 +851,14 @@ async function run() {
       const candidate = await candidatesCollection.findOne(query);
       res.json(candidate);
     });
+    // Delete candidate
+    app.delete('/deleteCandidate/:id', async (req, res) => {
+      const id = req.params.id;
+      console.log(id)
+      const query = { _id: objectId(id) };
+      const result = await candidatesCollection.deleteOne(query);
+      res.json(result);
+    })
     //   get single companyProfile by email
     app.get("/individualCompany/:email", async (req, res) => {
       const queryEmail = req.params.email;
@@ -803,6 +868,14 @@ async function run() {
       const candidate = await employersCollection.findOne(query);
       res.json(candidate);
     });
+    // Delete company
+    app.delete('/deleteCompany/:id', async (req, res) => {
+      const id = req.params.id;
+      console.log(id)
+      const query = { _id: objectId(id) };
+      const result = await companyCollection.deleteOne(query);
+      res.json(result);
+    })
     // Edit profile
     app.put("/singleProfile/:id", async (req, res) => {
       const filter = { _id: objectId(req.params.id) };
