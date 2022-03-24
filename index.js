@@ -264,21 +264,19 @@ async function run() {
       const result = await resumeCollection.insertOne(resumeUpload);
       res.send(result);
       console.log(resumeUpload);
-
-
     });
 
     // Delete resume
-    app.delete('/resume/:id', async (req, res) => {
+    app.delete("/resume/:id", async (req, res) => {
       const id = req.params.id;
-      console.log(id)
+      console.log(id);
       const query = { _id: objectId(id) };
       const result = await resumeCollection.deleteOne(query);
 
-      console.log('deleting resume with id ', result);
+      console.log("deleting resume with id ", result);
 
       res.json(result);
-    })
+    });
 
     // End Sadia Code //
 
@@ -306,13 +304,10 @@ async function run() {
 
       if (user?.role === "admin") {
         isAdmin = "admin";
-
       } else if (user?.role === "seeker") {
         isAdmin = "seeker";
-
       } else if (user?.role === "company") {
         isAdmin = "company";
-
       }
       console.log(isAdmin);
       res.json({ admin: isAdmin });
@@ -368,7 +363,7 @@ async function run() {
     //google sign in user update/put function
     app.put("/users", async (req, res) => {
       const user = req.body;
-      user.role = 'seeker';
+      user.role = "seeker";
       console.log("this is google user", user);
       const filter = { email: user.email };
       const options = { upsert: true };
@@ -561,7 +556,9 @@ async function run() {
       if (email && isFound === -1) {
         let removeLike = [];
         if (isOppositeFound !== -1) {
-          removeLike = await updated?.liked.filter(single => single !== email);
+          removeLike = await updated?.liked.filter(
+            (single) => single !== email
+          );
         }
         console.log(removeLike);
 
@@ -570,7 +567,7 @@ async function run() {
           comment: updated.comment,
           reply: updated.reply,
           liked: removeLike,
-          disliked: updated.disliked
+          disliked: updated.disliked,
         };
 
         const updateDoc = {
@@ -580,14 +577,16 @@ async function run() {
 
         res.json(result);
       } else if (email && isFound !== -1 && updated?.disliked.length) {
-        let removeDislike = await updated?.disliked.filter(single => single !== email);
+        let removeDislike = await updated?.disliked.filter(
+          (single) => single !== email
+        );
         console.log(removeDislike);
 
         const finalizeDoc = {
           comment: updated.comment,
           reply: updated.reply,
           liked: updated.liked,
-          disliked: removeDislike
+          disliked: removeDislike,
         };
 
         const updateDoc = {
@@ -647,7 +646,9 @@ async function run() {
       if (email && isFound === -1) {
         let removeDislike = [];
         if (isOppositeFound !== -1) {
-          removeDislike = await updated?.disliked.filter(single => single !== email);
+          removeDislike = await updated?.disliked.filter(
+            (single) => single !== email
+          );
         }
         console.log(removeDislike);
 
@@ -656,26 +657,28 @@ async function run() {
           comment: updated.comment,
           reply: updated.reply,
           liked: updated.liked,
-          disliked: removeDislike
+          disliked: removeDislike,
         };
         const updateDoc = {
-          $set: finalizeDoc
+          $set: finalizeDoc,
         };
         const result = await faq.updateOne(filter, updateDoc);
 
         res.json(result);
       } else if (email && isFound !== -1 && updated?.liked.length) {
-        let removeLike = await updated?.liked.filter(single => single !== email);
+        let removeLike = await updated?.liked.filter(
+          (single) => single !== email
+        );
         console.log(removeLike);
 
         const finalizeDoc = {
           comment: updated.comment,
           reply: updated.reply,
           liked: removeLike,
-          disliked: updated.disliked
+          disliked: updated.disliked,
         };
         const updateDoc = {
-          $set: finalizeDoc
+          $set: finalizeDoc,
         };
         const result = await faq.updateOne(filter, updateDoc);
 
