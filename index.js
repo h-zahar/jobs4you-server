@@ -291,6 +291,16 @@ async function run() {
       console.log(result);
       res.json(result);
     });
+    app.get("/companies", async (req, res) => {
+      const cursor = employersCollection.find({});
+      const user = await cursor.toArray();
+      res.send(user);
+    });
+    app.get("/alljobs", async (req, res) => {
+      const cursor = jobs.find({});
+      const user = await cursor.toArray();
+      res.send(user);
+    });
     app.get("/users", async (req, res) => {
       const cursor = userCollection.find({});
       const user = await cursor.toArray();
@@ -831,6 +841,11 @@ async function run() {
       const allCompanies = await employersCollection.find({}).toArray();
       res.json(allCompanies);
     });
+    //
+    // app.get("/companies", async (req, res) => {
+    //   const allCompanies = await employersCollection.find({}).toArray();
+    //   res.json(allCompanies);
+    // });
     //   get single profile
     app.get("/profile/:id", async (req, res) => {
       const id = req.params.id;
