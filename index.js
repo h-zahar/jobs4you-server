@@ -55,7 +55,7 @@ const io = socketio(server, {
     // allowedHeaders: ["accept-header"],
     // methods: ["GET", "POST"],
     // credentials: true
-  }
+  },
 });
 
 // Establishing Connection - Rifat
@@ -381,21 +381,20 @@ async function run() {
       res.json(result);
     });
     //order update/put function
-    app.put('/jobs/:id', async (req, res) => {
+    app.put("/jobs/:id", async (req, res) => {
       const id = req.params.id;
       // const newOrderStatus = req.body;
       const filter = { _id: objectId(id) };
       const options = { upsert: true };
       const updateDoc = {
         $set: {
-          status: 'approved'
-
+          status: "approved",
         },
       };
       const result = await jobs.updateOne(filter, updateDoc, options);
-      console.log('will be updating', id, result, updateDoc)
+      console.log("will be updating", id, result, updateDoc);
       res.json(result);
-    })
+    });
     // Nuzhat's Server
 
     // Post a Job
@@ -480,7 +479,6 @@ async function run() {
 
       const cursor = notifications.find(filter);
 
-
       const result = await cursor.toArray();
 
       if (result) {
@@ -507,7 +505,7 @@ async function run() {
       holdedDoc.isClicked = true;
 
       const updateDoc = {
-        $set: holdedDoc
+        $set: holdedDoc,
       };
 
       const result = await notifications.updateOne(filter, updateDoc);
@@ -515,7 +513,6 @@ async function run() {
       if (result) {
         res.json(result);
       }
-
     });
 
     // Company Collection
@@ -787,13 +784,13 @@ async function run() {
       res.json(updateResult);
     });
     // Delete govjob
-    app.delete('/deleteGovjob/:id', async (req, res) => {
+    app.delete("/deleteGovjob/:id", async (req, res) => {
       const id = req.params.id;
-      console.log(id)
+      console.log(id);
       const query = { _id: objectId(id) };
       const result = await govJobsCollection.deleteOne(query);
       res.json(result);
-    })
+    });
     // create pdf ( Raju )
     app.post("/createPdf", (req, res) => {
       console.log("server hit", req.body);
@@ -852,13 +849,13 @@ async function run() {
       res.json(candidate);
     });
     // Delete candidate
-    app.delete('/deleteCandidate/:id', async (req, res) => {
+    app.delete("/deleteCandidate/:id", async (req, res) => {
       const id = req.params.id;
-      console.log(id)
+      console.log(id);
       const query = { _id: objectId(id) };
       const result = await candidatesCollection.deleteOne(query);
       res.json(result);
-    })
+    });
     //   get single companyProfile by email
     app.get("/individualCompany/:email", async (req, res) => {
       const queryEmail = req.params.email;
@@ -869,13 +866,13 @@ async function run() {
       res.json(candidate);
     });
     // Delete company
-    app.delete('/deleteCompany/:id', async (req, res) => {
+    app.delete("/deleteCompany/:id", async (req, res) => {
       const id = req.params.id;
-      console.log(id)
+      console.log(id);
       const query = { _id: objectId(id) };
       const result = await companyCollection.deleteOne(query);
       res.json(result);
-    })
+    });
     // Edit profile
     app.put("/singleProfile/:id", async (req, res) => {
       const filter = { _id: objectId(req.params.id) };
