@@ -807,7 +807,7 @@ async function run() {
       const id = req.params.id;
       console.log(id)
       const query = { _id: objectId(id) };
-      const result = await companyCollection.deleteOne(query);
+      const result = await employersCollection.deleteOne(query);
       res.json(result);
     })
     // Edit profile
