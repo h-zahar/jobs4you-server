@@ -53,7 +53,7 @@ const io = socketio(server, {
   cors: {
     origin: "*",
     // allowedHeaders: ["accept-header"],
-    methods: ["GET", "POST"],
+    // methods: ["GET", "POST"],
     // credentials: true
   },
 });
@@ -129,6 +129,7 @@ async function run() {
     const applyList = database.collection("applyList");
     const userCollection = database.collection("users");
     const resumeCollection = database.collection("resumes");
+    const notifications = database.collection("notifications");
     // ... Raju's DB && Collection
     const profileDB = client.db("AllProfiles");
     const govJobsCollection = database.collection("Gov-jobs");
@@ -264,21 +265,19 @@ async function run() {
       const result = await resumeCollection.insertOne(resumeUpload);
       res.send(result);
       console.log(resumeUpload);
-
-
     });
 
     // Delete resume
-    app.delete('/resume/:id', async (req, res) => {
+    app.delete("/resume/:id", async (req, res) => {
       const id = req.params.id;
-      console.log(id)
+      console.log(id);
       const query = { _id: objectId(id) };
       const result = await resumeCollection.deleteOne(query);
 
-      console.log('deleting resume with id ', result);
+      console.log("deleting resume with id ", result);
 
       res.json(result);
-    })
+    });
 
     // End Sadia Code //
 
@@ -291,6 +290,16 @@ async function run() {
       const result = await userCollection.insertOne(user);
       console.log(result);
       res.json(result);
+    });
+    app.get("/companies", async (req, res) => {
+      const cursor = employersCollection.find({});
+      const user = await cursor.toArray();
+      res.send(user);
+    });
+    app.get("/alljobs", async (req, res) => {
+      const cursor = jobs.find({});
+      const user = await cursor.toArray();
+      res.send(user);
     });
     app.get("/users", async (req, res) => {
       const cursor = userCollection.find({});
@@ -306,21 +315,19 @@ async function run() {
 
       if (user?.role === "admin") {
         isAdmin = "admin";
-
       } else if (user?.role === "seeker") {
         isAdmin = "seeker";
-
       } else if (user?.role === "company") {
         isAdmin = "company";
-
       }
       console.log(isAdmin);
       res.json({ admin: isAdmin });
     });
     app.get("/usersDetails/:email", async (req, res) => {
+      console.log(req.params);
       const email = req.params.email;
-      const query = { email: email };
-      const user = await userCollection.findOne(query);
+      const query = { pEmail: email };
+      const user = await candidatesCollection.findOne(query);
 
       res.json(user);
     });
@@ -367,7 +374,7 @@ async function run() {
     //google sign in user update/put function
     app.put("/users", async (req, res) => {
       const user = req.body;
-      user.role = 'seeker';
+      user.role = "seeker";
       console.log("this is google user", user);
       const filter = { email: user.email };
       const options = { upsert: true };
@@ -381,6 +388,21 @@ async function run() {
       const filter = { email: user.email };
       const updateDoc = { $set: { role: "admin" } };
       const result = await userCollection.updateOne(filter, updateDoc);
+      res.json(result);
+    });
+    //order update/put function
+    app.put("/jobs/:id", async (req, res) => {
+      const id = req.params.id;
+      // const newOrderStatus = req.body;
+      const filter = { _id: objectId(id) };
+      const options = { upsert: true };
+      const updateDoc = {
+        $set: {
+          status: "approved",
+        },
+      };
+      const result = await jobs.updateOne(filter, updateDoc, options);
+      console.log("will be updating", id, result, updateDoc);
       res.json(result);
     });
     // Nuzhat's Server
@@ -456,6 +478,49 @@ async function run() {
       const result = await skills.updateOne(filter, upsertedDoc, options);
 
       if (result?.acknowledged) {
+        res.json(result);
+      }
+    });
+
+    // Notifications
+    app.get("/notifications/:email", async (req, res) => {
+      const email = req.params.email;
+      const filter = { email: email };
+
+      const cursor = notifications.find(filter);
+
+      const result = await cursor.toArray();
+
+      if (result) {
+        res.json(result);
+      }
+    });
+
+    app.post("/notifications", async (req, res) => {
+      const { email, message, link } = req.body;
+
+      const insertDoc = { email: email, message: message, link: link };
+
+      const result = await notifications.insertOne(insertDoc);
+
+      if (result) {
+        res.json(result.acknowledged);
+      }
+    });
+
+    app.put("/notifications/:id", async (req, res) => {
+      const id = req.params.id;
+      const filter = { _id: objectId(id) };
+      const holdedDoc = req.body;
+      holdedDoc.isClicked = true;
+
+      const updateDoc = {
+        $set: holdedDoc,
+      };
+
+      const result = await notifications.updateOne(filter, updateDoc);
+
+      if (result) {
         res.json(result);
       }
     });
@@ -560,7 +625,9 @@ async function run() {
       if (email && isFound === -1) {
         let removeLike = [];
         if (isOppositeFound !== -1) {
-          removeLike = await updated?.liked.filter(single => single !== email);
+          removeLike = await updated?.liked.filter(
+            (single) => single !== email
+          );
         }
         console.log(removeLike);
 
@@ -569,7 +636,7 @@ async function run() {
           comment: updated.comment,
           reply: updated.reply,
           liked: removeLike,
-          disliked: updated.disliked
+          disliked: updated.disliked,
         };
 
         const updateDoc = {
@@ -579,14 +646,16 @@ async function run() {
 
         res.json(result);
       } else if (email && isFound !== -1 && updated?.disliked.length) {
-        let removeDislike = await updated?.disliked.filter(single => single !== email);
+        let removeDislike = await updated?.disliked.filter(
+          (single) => single !== email
+        );
         console.log(removeDislike);
 
         const finalizeDoc = {
           comment: updated.comment,
           reply: updated.reply,
           liked: updated.liked,
-          disliked: removeDislike
+          disliked: removeDislike,
         };
 
         const updateDoc = {
@@ -646,7 +715,9 @@ async function run() {
       if (email && isFound === -1) {
         let removeDislike = [];
         if (isOppositeFound !== -1) {
-          removeDislike = await updated?.disliked.filter(single => single !== email);
+          removeDislike = await updated?.disliked.filter(
+            (single) => single !== email
+          );
         }
         console.log(removeDislike);
 
@@ -655,26 +726,28 @@ async function run() {
           comment: updated.comment,
           reply: updated.reply,
           liked: updated.liked,
-          disliked: removeDislike
+          disliked: removeDislike,
         };
         const updateDoc = {
-          $set: finalizeDoc
+          $set: finalizeDoc,
         };
         const result = await faq.updateOne(filter, updateDoc);
 
         res.json(result);
       } else if (email && isFound !== -1 && updated?.liked.length) {
-        let removeLike = await updated?.liked.filter(single => single !== email);
+        let removeLike = await updated?.liked.filter(
+          (single) => single !== email
+        );
         console.log(removeLike);
 
         const finalizeDoc = {
           comment: updated.comment,
           reply: updated.reply,
           liked: removeLike,
-          disliked: updated.disliked
+          disliked: updated.disliked,
         };
         const updateDoc = {
-          $set: finalizeDoc
+          $set: finalizeDoc,
         };
         const result = await faq.updateOne(filter, updateDoc);
 
@@ -721,13 +794,13 @@ async function run() {
       res.json(updateResult);
     });
     // Delete govjob
-    app.delete('/deleteGovjob/:id', async (req, res) => {
+    app.delete("/deleteGovjob/:id", async (req, res) => {
       const id = req.params.id;
-      console.log(id)
+      console.log(id);
       const query = { _id: objectId(id) };
       const result = await govJobsCollection.deleteOne(query);
       res.json(result);
-    })
+    });
     // create pdf ( Raju )
     app.post("/createPdf", (req, res) => {
       console.log("server hit", req.body);
@@ -768,6 +841,11 @@ async function run() {
       const allCompanies = await employersCollection.find({}).toArray();
       res.json(allCompanies);
     });
+    //
+    // app.get("/companies", async (req, res) => {
+    //   const allCompanies = await employersCollection.find({}).toArray();
+    //   res.json(allCompanies);
+    // });
     //   get single profile
     app.get("/profile/:id", async (req, res) => {
       const id = req.params.id;
@@ -786,13 +864,13 @@ async function run() {
       res.json(candidate);
     });
     // Delete candidate
-    app.delete('/deleteCandidate/:id', async (req, res) => {
+    app.delete("/deleteCandidate/:id", async (req, res) => {
       const id = req.params.id;
-      console.log(id)
+      console.log(id);
       const query = { _id: objectId(id) };
       const result = await candidatesCollection.deleteOne(query);
       res.json(result);
-    })
+    });
     //   get single companyProfile by email
     app.get("/individualCompany/:email", async (req, res) => {
       const queryEmail = req.params.email;
@@ -803,13 +881,13 @@ async function run() {
       res.json(candidate);
     });
     // Delete company
-    app.delete('/deleteCompany/:id', async (req, res) => {
+    app.delete("/deleteCompany/:id", async (req, res) => {
       const id = req.params.id;
-      console.log(id)
+      console.log(id);
       const query = { _id: objectId(id) };
       const result = await employersCollection.deleteOne(query);
       res.json(result);
-    })
+    });
     // Edit profile
     app.put("/singleProfile/:id", async (req, res) => {
       const filter = { _id: objectId(req.params.id) };
